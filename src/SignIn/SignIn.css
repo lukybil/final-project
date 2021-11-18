@@ -1,0 +1,70 @@
+.SignIn {
+    min-width: 256px;
+    width: 600px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px ) {
+    .SignIn {
+        width: 100%;
+    }
+}
+
+.SignIn .under-headline {
+    color: #888;
+    display: block;
+    margin: 20px 0;
+}
+
+.SignIn-flex {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.SignIn input,.SignIn .button-submit {
+    padding: 8px;
+    display: inline-block;
+    margin: 4px 0;
+    width: 320px;
+    max-width: 100%;
+    font-size: larger;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.SignIn .button-submit {
+    background-color: var(--color-primary);
+    color: white;
+    margin-top: 20px;
+}
+
+.SignIn .button-submit:hover {
+    cursor: pointer;
+    background-color: var(--color-primary-h);
+}
+
+.SignIn .disclaimer {
+    font-size: smaller;
+    color: #888;
+    display: block;
+    margin: 20px 0;
+}
+
+.SignIn .button-switch-forms {
+    border: none;
+    background-color: inherit;
+    color: #0c0c86;
+    font-weight: 700;
+    font-size: inherit;
+    margin-left: 2px;
+}
+
+.SignIn .button-switch-forms:hover {
+    color: #1414c7;
+    cursor: pointer;
+}

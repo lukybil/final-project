@@ -1,0 +1,100 @@
+.Tile {
+    height: 200px;
+    width: 100%;
+    border-radius: 16px;
+    position: relative;
+}
+
+.Tile:hover {
+    cursor: pointer;
+}
+
+.Tile-Dialog-flex {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.Tile-Dialog-column-info {
+    flex: 75%;
+    border-right: 1px solid #ddd;
+}
+
+.Tile-Dialog-column-comments {
+    flex: 25%;
+}
+
+@media only screen and (max-width: 768px) {
+    .Tile-Dialog-column-info {
+        flex: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+    .Tile-Dialog-column-comments {flex: 100%;}
+}
+
+.Tile-img {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    z-index: 1;
+    border-radius: 8px;
+}
+.Tile:hover .Tile-img {
+    filter: brightness(0.7);
+}
+
+.Tile-h2,.Tile-h1,.Tile-likes {
+    display: inline-block;
+    color: white;
+    font-weight: 600;
+    position: absolute;
+    z-index: 2;
+    left: 10px;
+    bottom: 5px;
+    font-size: xx-large;
+    text-shadow:
+   -1px -1px 0 #222,  
+    1px -1px 0 #222,
+    -1px 1px 0 #222,
+     1px 1px 0 #222;
+}
+
+.Tile-h2 {
+    font-weight: 600;
+    bottom: 35px;
+    font-size: larger;
+}
+
+.Tile-likes {
+    left: auto;
+    bottom: auto;
+	right: 10px;
+    top: 5px;
+    width: fit-content;
+    font-size: medium;
+}
+
+.Tile-dialog img:first-child {
+    width: 100%;
+    object-fit: cover;
+}
+
+.Tile-Dialog-Comment {
+    border-top: 1px solid #ddd;
+}
+
+.Tile-dialog .big-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: red;
+    font-size: 100px;
+}

@@ -1,0 +1,64 @@
+.main-flex {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+	margin: auto;
+  justify-content: center;
+	padding: 0 20px;
+  gap: 20px;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+.AiFillHeart {
+  position: relative;
+  top: 2px;
+  color: rgb(255, 179, 179);
+}
+
+.main-Grid-container>div:nth-child(-n + 2) .Tile {
+	height: 300px;
+}
+
+.main-column-grid {
+	flex: 75%;
+}
+
+.main-column-users {
+	flex: 25%;
+  position: relative;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .main-flex {
+    flex-wrap: wrap;
+  }
+  div[class*=main-column-] {
+    flex: 100%;
+  }
+}
+
+.UserRanking {
+  width: 100%;
+  padding: 8px 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: larger;
+}
+
+.UserRanking th {
+  color: var(--color-primary);
+  font-weight: 700;
+  padding: 8px;
+}
+
+.UserRanking tr td {
+  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+  padding: 8px;
+}
+
+.UserRanking tr:nth-child(2n) td {
+  background-color: var(--color-secondary);
+}

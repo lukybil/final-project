@@ -1,0 +1,149 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+nav {
+  position: sticky;
+  list-style: none;
+  height: 64px;
+  vertical-align: middle;
+  padding: 0 20px;
+  border-bottom: 1px solid #ddd;
+  z-index: 3;
+}
+
+nav .Brand {
+  position: absolute;
+  left: 0;
+  top: -16px;
+}
+
+nav ul {
+  height: 100%;
+  align-items: center;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: right;
+}
+
+nav li {
+  position: relative;
+  font-weight: 500;
+  color: #222;
+}
+
+.Nav-button {
+  background-color: inherit;
+  border: none;
+  font-size: medium;
+  font-weight: 500;
+  color: #222;
+  padding: 16px;
+}
+
+.Nav-button:hover {
+  cursor: pointer;
+  background-color: #ddd;
+}
+
+.Nav-button-selected {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.Nav-signIn-button {
+  padding: 12px 24px;
+  background-color: var(--color-anti-primary);
+  border-radius: 8px;
+}
+
+.Nav-signIn-button:hover {
+  background-color: var(--color-anti-primary-h);
+}
+
+.Nav-user {
+  position: relative;
+}
+
+.Nav-user button {
+  border: none;
+  background: inherit;
+}
+
+.Nav-user button:hover {
+  cursor: pointer;
+}
+
+.Nav-user img {
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  padding: 16px;
+  position: relative;
+  top: -8px;
+}
+
+.Nav-user span {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+  font-size: small;
+  font-weight: 500;
+}
+
+.UserMenu {
+  position: absolute;
+  top: 100%;
+  left: 100%;
+  width: 300px;
+  transform: translate(-100%, 0);
+  background-color: #fff;
+  box-shadow: var(--mui-box-shadow);
+  padding: 40px 20px;
+}
+
+.UserMenu-flex {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+	margin: auto;
+  justify-content: center;
+	padding: 0 8px;
+  gap: 4px;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+.UserMenu-flex>button {
+  background-color: white;
+  width: 100%;
+  padding: 12px;
+  font-size: larger;
+}
+
+.UserMenu svg {
+  vertical-align: middle;
+}
+
+.UserMenu-flex>button:hover {
+  background-color: #ddd;
+}
+
+.button-logout {
+  color: white;
+  background-color: rgb(255, 64, 64) !important;
+  border-radius: 8px;
+}
+
+.button-logout:hover {
+  color: white;
+  background-color: rgb(168, 44, 44) !important;
+}
+
+

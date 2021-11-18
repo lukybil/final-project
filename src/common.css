@@ -1,0 +1,44 @@
+:root {
+    --color-primary: #7C64BD;
+    --color-anti-primary: #FBD872;
+    --color-secondary: #DBF2FF;
+    
+    --color-primary-h: #8f71e0;
+    --color-anti-primary-h: #ffeaac;
+
+    /*--color-primary: #a72159;*/
+
+
+    --mui-box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
+}
+
+.button-primary {
+    padding: 8px;
+    display: inline-block;
+    font-size: larger;
+    border-radius: 4px;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    margin: 8px;
+}
+
+.button-primary:hover {
+    cursor: pointer;
+    background-color: var(--color-primary-h);
+}
+
+.button-danger {
+    padding: 8px;
+    display: inline-block;
+    font-size: larger;
+    border-radius: 4px;
+    background-color: red;
+    color: white;
+    border: none;
+    margin: 8px;
+}
+
+.Brand {
+    position: relative;
+}
