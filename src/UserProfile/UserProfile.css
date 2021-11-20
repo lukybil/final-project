@@ -1,0 +1,10 @@
+.UserProfile h2 {
+    margin: 30px 0;
+}
+
+.UserProfile h2 .UserAvatar {
+    height: 64px;
+    width: 64px;
+    font-size: 40px;
+    line-height: 64px;
+}

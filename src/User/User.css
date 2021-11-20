@@ -1,0 +1,54 @@
+.User {
+    color: black;
+    position: relative;
+    width: fit-content;
+}
+
+.User a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.User>span:hover {
+    color: #555;
+}
+
+.User-card {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: 200px;
+    background-color: white;
+    box-shadow: var(--mui-box-shadow);
+}
+
+.User:hover .User-card {
+    display: block;
+}
+
+.UserAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 32px;
+    display: inline-block;
+    color: #555;
+    position: relative;
+    text-align: center;
+    object-fit: cover;
+}
+
+.UserAvatar span {
+    display: inline-block;
+}
+
+img.UserAvatar {
+    vertical-align: -20%;
+}
+
+.User .UserAvatar {
+    margin-right: 4px;
+}

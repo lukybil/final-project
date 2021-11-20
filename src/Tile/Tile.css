@@ -81,7 +81,7 @@
     font-size: medium;
 }
 
-.Tile-dialog img:first-child {
+.Tile-dialog .main-img {
     width: 100%;
     object-fit: cover;
 }
@@ -97,4 +97,21 @@
     transform: translate(-50%, -50%);
     color: red;
     font-size: 100px;
+}
+
+.Tile-dialog .wrapper {
+    padding: 10px 24px 40px 24px;
+}
+
+.Tile .User {
+    display: inline-block;
+}
+
+.Tile-dialog .User .username {
+    font-size: large;
+}
+
+.Tile-dialog table td:first-child {
+    font-weight: 600;
+    padding-right: 8px;
 }

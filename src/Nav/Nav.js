@@ -5,17 +5,16 @@ import Dialog from '@mui/material/Dialog';
 import SignIn from '../SignIn/SignIn';
 import MySnackbar from "../MySnackbar";
 import {Brand} from "../App";
-
-import { BiExit } from "react-icons/bi";
-import { IoMdSettings } from "react-icons/io";
-import ClickAwayListener from "@mui/core/ClickAwayListener";
+import {NavLink, Routes, Route} from 'react-router-dom';
+import { UserAvatar } from "../User/User";
+import UserMenu from '../UserMenu/UserMenu';
 
 
 function NavButton(props) {
   return (
     <button 
-      className={"Nav-button" + (props.isSelected ? " Nav-button-selected" : "")} 
-      onClick={props.onClick}>{props.text}
+      className="Nav-button"
+    >{props.text}
     </button>
   );
 }
@@ -26,28 +25,13 @@ function SignInButton(props) {
   );
 }
 
-function UserMenu(props) {
-  return (
-    <ClickAwayListener onClickAway={props.handleClickAway}>
-      <div className="UserMenu">
-        <div className="UserMenu-flex">
-          <h3>{props.user.username}</h3>
-          <img src={props.user.profileImg} alt="User"/>
-          <hr/>
-          <button onClick={props.handleSettings}>Settings <IoMdSettings/></button>
-          <button onClick={props.handleSignOut} className="button-logout">Sign out <BiExit/></button>
-        </div>
-      </div>
-    </ClickAwayListener>
-  );
-}
+
 
 class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSignedIn: false, 
-      page: "Home", 
+      isSignedIn: false,
       isSignInOpen: false,
       isUserMenuOpen: false,
       snackbar: {open: false, severity: "info", message: ""}
@@ -57,14 +41,12 @@ class Nav extends React.Component {
   generateMenuButton(name, isSelected) {
     return (
       <li>
-        <NavButton 
-          text={name} 
-          isSelected={isSelected} 
-          onClick={() => {
-            this.props.onPageChange(name);
-            this.setState({page: name});
-          }}
-        />
+        <NavLink to={(name !== "Home" ? name.toLowerCase() : "/")} activeClassName="Nav-button-selected">
+          <NavButton 
+            text={name} 
+            isSelected={isSelected}
+          />
+        </NavLink>
       </li>
     );
   }
@@ -97,6 +79,10 @@ class Nav extends React.Component {
     });
   }
 
+  handleEditProfile() {
+
+  }
+
   render() {
     let user = this.props.db.getCurrentUser();
     let names = ["Home", "Destinations", "Experiences"];
@@ -105,7 +91,9 @@ class Nav extends React.Component {
     let userMenu = 
       <UserMenu
         open={this.state.isUserMenuOpen}
-        user={user} 
+        user={user}
+        db={this.props.db}
+        handleEditProfile={this.handleEditProfile.bind(this)}
         handleSignOut={this.handleSignOut.bind(this)} 
         handleSettings={this.openSettings.bind(this)}
         handleClickAway={(e) => {this.setState({isUserMenuOpen: false})}}
@@ -114,18 +102,22 @@ class Nav extends React.Component {
     if (!loggedIn) { //Guest
       userPanel = (
         <li className="Nav-user">
-          <img src={user.profileImg} alt="Profile"></img>
-          <span>{user.username}</span>
+          <div className="wrapper">
+            <UserAvatar user={user} />
+            <span className="Nav-username">{user.username}</span>
+          </div>
         </li>
       );
     }
     else { //Registered user
       userPanel = (
         <li className="Nav-user">
-          <button onClick={(e) => { this.setState({isUserMenuOpen: true}) }}>
-            <img src={user.profileImg} alt="Profile"></img>
-            <span>{user.username}</span>
-          </button>
+          <div className="wrapper">
+            <button onClick={(e) => { this.setState({isUserMenuOpen: true}) }}>
+              <UserAvatar user={user} db={this.props.db}/>
+              <span className="Nav-username">{user.username}</span>
+            </button>
+          </div>
           {this.state.isUserMenuOpen ? userMenu : ""}
           {console.log(this.state.isUserMenuOpen)}
         </li>
@@ -133,7 +125,10 @@ class Nav extends React.Component {
     }
     return (
       <nav>
-        {this.state.page !== "Home" ? <Brand/> : ""}
+        <Routes>
+          <Route path="/" />
+          <Route path="/*" element={<Brand/>}/>
+        </Routes>
         <ul>
           {this.generateMenuButton(names[0], this.state.page===names[0])}
           {this.generateMenuButton(names[1], this.state.page===names[1])}

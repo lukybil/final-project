@@ -6,6 +6,8 @@ import Nav from './Nav/Nav';
 import React from 'react';
 import Home from './Home/Home';
 import Experiences from './Experiences/Experiences';
+import {Routes , Route} from 'react-router-dom';
+import UserProfile from './UserProfile/UserProfile';
 
 function Logo(props) {
   return (
@@ -22,7 +24,7 @@ export function Brand(props) {
   );
 }
 
-function Header() {
+export function Header() {
   return (
     <header>
       <div className="header-flex">
@@ -47,7 +49,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.db = new DB(this.setCurrentUser.bind(this))
-    this.state = {pageName: "Home", user: this.db.getCurrentUser(), isDatabaseLoaded: false};
+    this.state = {user: this.db.getCurrentUser(), isDatabaseLoaded: false};
   }
 
   setCurrentUser(newUser) {
@@ -61,33 +63,20 @@ class App extends React.Component {
     setDbBeforeUnload(this.db);
  }
 
-  handlePageChange(pageName) {
-    if (this.state.pageName !== pageName) {
-      this.setState({pageName: pageName})
-    }
-  }
-
   render() {
     let pageContent;
-    switch(this.state.pageName) {
-      case "Home":
-        pageContent = <Home/>;
-        break;
-      case "Destinations":
-        pageContent = 
-          <span>Destinations</span>
-        break;
-      case "Experiences":
-        pageContent = 
-          pageContent = <Experiences db={this.db} />
-        break;
-      default:
-        break;
-    }
     return (
       <div className="App">
-        {this.state.pageName === "Home" ? <Header/> : ""}
-        <Nav db={this.db} onPageChange={this.handlePageChange.bind(this)}/>
+        <Routes>
+          <Route path="/" element={<Header/>}/>
+        </Routes>
+        <Nav db={this.db}/>
+        <Routes >
+          <Route path="/destinations" element={<span>Destinations</span>}/>
+          <Route path="/experiences" element={<Experiences db={this.db}/>}/>
+          <Route path="/userProfile/:username" element={<UserProfile db={this.db}/>}/>      
+          <Route path="/" element={<Home/>} />
+        </Routes >
         {pageContent}
       </div>
     );

@@ -4,6 +4,7 @@ import Vienna from "./img/content/vienna.jpg";
 import London from "./img/content/london.jpg";
 
 import profileImg from "./img/default-profile-picture.png"
+import { ExpTile } from "./Tile/Tile";
 
 const guestUser = {username: "Guest", email: "none", profileImg: profileImg, numberLikes: 0};
 
@@ -18,11 +19,13 @@ User.prototype.toString = () => {
 }
 
 class DB {
+    colors = ["abdee6", "cbaacb", "ffffb5", "ffccb60", "f3b0c3", "fee1e8", "fed7c3", "ecd5e3", "d4f0f0", "cce2cb", "b6cfb6", "97c1a9", "a2e1db"];
+
     usersMap = new Map([
-        ["kingkong", {username: "kingkong", email: "kingkong@gmail.comm", password: "p", profileImg: "", numberLikes: 0}],
-        ["godzilla", {username: "godzilla", email: "gzilla@gmail.comm", password: "p", profileImg: "", numberLikes: 0}],
-        ["charlie", {username: "charlie", email: "ch.arlie@gmail.comm", password: "p", profileImg: "", numberLikes: 0}],
-        ["boris", {username: "boris", email: "boris.sluklov@gmail.comm", password: "p", profileImg: "", numberLikes: 0}]
+        ["kingkong", {username: "kingkong", email: "kingkong@gmail.comm", password: "p", defaultAvatarColor: this.getRandomColor(), profileImg: "", numberLikes: 0}],
+        ["godzilla", {username: "godzilla", email: "gzilla@gmail.comm", password: "p", defaultAvatarColor: this.getRandomColor(), profileImg: "", numberLikes: 0}],
+        ["charlie", {username: "charlie", email: "ch.arlie@gmail.comm", password: "p", defaultAvatarColor: this.getRandomColor(), profileImg: "", numberLikes: 0}],
+        ["boris", {username: "boris", email: "boris.sluklov@gmail.comm", password: "p", defaultAvatarColor: this.getRandomColor(), profileImg: "", numberLikes: 0}]
     ]);
 
     topUsersList = [];
@@ -34,17 +37,19 @@ class DB {
     experiences = [
         {
             id: 0,
-            name: "A week in Madrid",
+            name: "Erasmus in Madrid",
             img: Madrid,
             country: "Spain",
             city: "Madrid", 
             username: "kingkong",
+            description: "A whole semester spent in the city of liberty in Europe.",
             likes: new Set(["godzilla", "charlie", "boris"]),
             documentation: "ID for EU Citizens",
             budget: {from: 600, to: 800, notes: "Accomodation can be costly."},
             transportation: "Metro is very good",
             accomodation: "Nice",
             usefulLinks: ["spain.com", "madrid.es"],
+            tags: ["cultural", "rural", "historical", "business"],
             comments: [
                 {username: "kingkong", date: "2021-11-14 21:56:48", content: "Yo bro, very cool trip bro, wassup btw how ya doin bro, yo cool?"}, 
                 {username: "boris", date: "2021-11-15 15:01:03", content: "Hello broder, gud to see you."}
@@ -57,12 +62,14 @@ class DB {
             country: "Italy",
             city: "Rome", 
             username: "godzilla",
+            description: "A week long trip to Rome, we saw many cool places, it was amazing.",
             likes: new Set(["godzilla", "charlie", "boris"]),
             documentation: "ID for EU Citizens",
             budget: {from: 600, to: 800, notes: "Accomodation can be costly."},
             transportation: "Metro is available as well as okay buses.",
             accomodation: "Cheap on the outskirst but also dirty surroundings",
             usefulLinks: ["italy.com", "rome.it"],
+            tags: ["cultural", "historical"],
             comments: [
                 {username: "kingkong", date: "2021-11-17 21:40:32", content: "Hi so did you like it bra?"}
             ]
@@ -77,8 +84,8 @@ class DB {
     startup() {
         this.updateUserLikesAmount();
         this.updateTopUsersList();
-        setInterval(this.updateUserLikesAmount.bind(this), 1.5 * 60 * 1000);
-        setInterval(this.updateTopUsersList.bind(this), 3 * 60 * 1000); //every 3 minutes, in ms
+        setInterval(this.updateUserLikesAmount.bind(this), 0.2 * 60 * 1000);
+        setInterval(this.updateTopUsersList.bind(this), 0.2 * 60 * 1000); //every 3 minutes, in ms
     }
 
     setAppSetCurrentUser(appSetCurrentUser) {
@@ -151,31 +158,6 @@ class DB {
         return this.topUsersList;
     }
 
-    checkExpAndFill(exp) {
-		if (typeof exp !== 'object' ||
-		Array.isArray(exp) ||
-		exp === null)
-		{	
-			exp = {};
-		}
-		let propNames = ["id", "name", "country", "city", "username", "documentation", "budget", "transportation", "accomodation"];
-		propNames.forEach( (prop) => {
-			if (exp[prop] === undefined) {
-				exp[prop] = "";
-			}
-		})
-		if (exp.likes === undefined || !exp.likes instanceof Set) {
-			exp.likes = new Set();
-		}
-		if (exp.usefulLinks === undefined || !Array.isArray(exp.usefulLinks)) {
-			exp.usefulLinks = [];
-		}
-		if (exp.comments === undefined || !Array.isArray(exp.comments)) {
-			exp.comments = [];
-		}
-		return exp;
-	}
-
     getTopExp(amount) {
         let topExp = [...this.experiences];
         topExp.sort((a, b) => b.likes.size - a.likes.size);
@@ -197,7 +179,7 @@ class DB {
     }
 
     addExp(exp) {
-        this.checkExpAndFill(exp);
+        ExpTile.checkExpAndFill(exp);
         console.log(exp);
         exp.id = this.nextExpId++;
         if (exp !== undefined)
@@ -248,10 +230,6 @@ class DB {
         if (user === undefined)
             return null;
         if (user.password === password) {
-            //delete user.password;
-            if (user.profileImg === "") {
-                user.profileImg = profileImg;
-            }
             this.setCurrentUser(user);
             return user;
         }
@@ -275,6 +253,28 @@ class DB {
 
     getCurrentUser() {
         return this.currentUser;
+    }
+
+    getRandomColor() {
+        let index = Math.floor(Math.random() * this.colors.length);
+        return "#"+this.colors[index];
+    }
+
+    updateUser(user) {
+        this.usersMap.set(user.username, user);
+        if (this.getCurrentUser().username = user.username);
+            this.setCurrentUser(user);
+    }
+
+    getTopExpByUser(username, amount) {
+        let userExps = [];
+        this.experiences.forEach( (exp) => {
+            if (exp.username === username) {
+                userExps.push(exp);
+            }
+        });
+        userExps.sort((a, b) => b.likes.size - a.likes.size);
+        return userExps;
     }
 }
 

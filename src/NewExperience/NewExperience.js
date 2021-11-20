@@ -11,27 +11,37 @@ const fileToDataUri = (file) => new Promise((resolve, reject) => {
 	reader.readAsDataURL(file);
 })
 
+function PillCheckbox(props) {
+	return (	
+		<label className="PillCheckbox no-selection">
+			<input type="checkbox" name="tags" value={props.value}/>
+			<span>{props.value}</span>
+		</label>
+	);
+}
+
 class NewExperience extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {snackbar: {open: false, severity: "info", message: ""}};
+		this.state = {snackbar: {open: false, severity: "info", message: ""}, mainImg: ""};
 		this.db = props.db;
 	}
 
-	onChange = (file) => {
-    
-    if(!file) {
-			this.setState({dataUri: ''});
-      return;
-    }
+	onFileChange = (file) => {
+		if(!file) {
+				this.setState({dataUri: ''});
+		return;
+		}
+		fileToDataUri(file)
+		.then(dataUri => {
+			this.setState({dataUri: dataUri});
+		})
+	}
+	
+	onMainImgChange(src) {
+		this.setState({mainImg: src});
+	}
 
-    fileToDataUri(file)
-      .then(dataUri => {
-        this.setState({dataUri: dataUri});
-      })
-    
-  }
-//TODO: username is missing
 	onSubmit(e) {
 		e.preventDefault();
 		let username;
@@ -39,13 +49,17 @@ class NewExperience extends React.Component {
 			this.setState({snackbar: {open: true, message: "You have to sign in to add experiences.", severity: "info"}});
 			return;
 		}
-		let names = ["name", "country", "city", "documentation", "budget", "transportation", "accomodation"];
+		let names = ["name", "img", "country", "city", "description", "documentation", "budget", "transportation", "accomodation"];
 		let exp = {};
 		names.forEach( (n) => {
-			exp[n] = document.querySelector("input[name=" + n + "]")?.value;
+			exp[n] = document.querySelector("input[name=" + n + "],textarea[name=" + n + "]")?.value;
 		});
-		exp.img = this.state.dataUri;
+		//exp.img = this.state.dataUri;
 		exp.username = username;
+		exp.tags = [];
+		document.querySelectorAll(".PillCheckbox input:checked").forEach( (input) => {
+			exp.tags.push(input.value);
+		});
 		this.db.addExp(exp);
 		this.setState({snackbar: {open: true, message: "Experience added successfully!", severity: "success"}});
 	}
@@ -56,6 +70,10 @@ class NewExperience extends React.Component {
 
 	render() {
 		let snackbar = this.state.snackbar;
+		let tags = ["cultural", "rural", "historical", "business", "environmental", "eco-tourism"];
+		let tagPills = tags.map( (tag) => {
+			return <PillCheckbox value={tag} />
+		});
 		return (
 			<div className="NewExperience">
 				<MySnackbar 
@@ -66,19 +84,21 @@ class NewExperience extends React.Component {
 				/>
 				<form>
 					<h2>Add Experience</h2>
-					<div className="NewExperience-flex">
-						<label htmlFor="newExpImg">
-							<img src={this.state.dataUri} alt="Upload picture"></img>	
-						</label>		
-						<input type="file" id="newExpImg" name="img" onChange={(e) => this.onChange(e.target.files[0])}></input>
+					<div className="flex">
+						<span>
+							<img src={this.state.mainImg} alt="🖼"></img>
+						</span>
+						<input type="text" id="newExpImg" name="img" placeholder="Main image" onChange={(e) => this.onMainImgChange(e.target.value)}></input>
 						<input type="text" id="newExpName" name="name" placeholder="Name"></input>
 						<input type="text" id="newExpCountry" name="country" placeholder="Country"></input>
 						<input type="text" id="newExpCity" name="city" placeholder="City"></input>
+						<textarea type="text" id="newExpDescription" name="description" placeholder="Description"></textarea>
 						<textarea id="newExpDocumentation" name="documentation" placeholder="Documentation"></textarea>
 						<input type="text" id="newExpBudget" name="budget" placeholder="Budget"></input>
 						<textarea id="newExpTrasportation" name="transportation" placeholder="Trasnportation"></textarea>
 						<textarea id="newExpAccomodation" name="accomodation" placeholder="Accomodation"></textarea>
 						<textarea id="newExpUsefulLinks" name="usefulLinks" placeholder="Useful links"></textarea>
+						<div>{tagPills}</div>
 						<button className="button-primary" onClick={this.onSubmit.bind(this)}>Add experience</button>
 					</div>
 				</form>
@@ -89,77 +109,10 @@ class NewExperience extends React.Component {
 
 export default NewExperience
 
-/*					<table>
-						<tr>
-							<td>
-								<label for="newExpImg">Image</label>
-							</td>
-							<td>
-								<input type="file" id="newExpImg" name="img" onChange={(e) => this.onChange(e.target.files[0])}></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpName">Name</label>
-							</td>
-							<td>
-								<input type="text" id="newExpName" name="name"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpCountry">Country</label>
-							</td>
-							<td>
-								<input type="text" id="newExpCountry" name="country"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpCity">City</label>
-							</td>
-							<td>
-								<input type="text" id="newExpCity" name="city"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpDocumentation">Documentation</label>
-							</td>
-							<td>
-								<input type="text" id="newExpDocumentation" name="documentation"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpBudget">Budget</label>
-							</td>
-							<td>
-								<input type="text" id="newExpBudget" name="budget"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpTrasportation">Trasportation</label>
-							</td>
-							<td>
-								<input type="text" id="newExpTrasportation" name="transportation"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpAccomodation">Accomodation</label>
-							</td>
-							<td>
-								<input type="text" id="newExpAccomodation" name="accomodation"></input>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="newExpUsefulLinks">Useful links</label>
-							</td>
-							<td>
-								<input type="text" id="newExpUsefulLinks" name="usefulLinks"></input>
-							</td>
-						</tr>
-					</table>*/
+/*
+
+						<label htmlFor="newExpImg">
+							<img src={this.state.dataUri} alt="Upload picture"></img>	
+						</label>		
+						<input type="file" id="newExpImg" name="img" onChange={(e) => this.onFileChange(e.target.files[0])}></input>
+*/

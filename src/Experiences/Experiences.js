@@ -1,6 +1,6 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
-import Tile from "../Tile/Tile";
+import User from "../User/User";
 import {ExpTile} from "../Tile/Tile";
 import '../common.css';
 import "../Home/Home.css";
@@ -8,19 +8,20 @@ import "./Experiences.css";
 import {AiFillHeart} from 'react-icons/all'
 import Dialog from '@mui/material/Dialog';
 import NewExperience from "../NewExperience/NewExperience";
+import MySnackbar from "../MySnackbar";
 
 function UserRow(props) {
 	return (
-		<tr className="UserRow" key={props.username}>
-			<td>{props.username}</td>
-			<td>{props.numberLikes}<AiFillHeart className="AiFillHeart"/></td>
+		<tr className="UserRow" key={props.user.username}>
+			<td><User user={props.user}/></td>
+			<td>{props.user.numberLikes}<AiFillHeart className="AiFillHeart"/></td>
 		</tr>
 	);
 }
 
 function UserRanking(props) {
 	let users = props.topUsers.map( (user) => {
-		return <UserRow username={user.username} numberLikes={user.numberLikes} />
+		return <UserRow user={user}/>
 	});
 	return (
 		<table className="UserRanking">
@@ -41,11 +42,11 @@ class Experiences extends React.Component {
 	constructor(props) {
 		super(props);
 		this.db = props.db;
-		this.state = {isNewExpOpen: false};
+		this.state = {isNewExpOpen: false, snackbar: {open: false, severity: "info", message: ""}};
 	}
 
 	componentDidMount() {
-		this.interval = setInterval(() => this.setState({}), 3 * 60 * 1000);
+		this.interval = setInterval(() => this.setState({}), 0.2 * 60 * 1000);
 	}
 
 	componentWillUnmount() {
@@ -57,6 +58,7 @@ class Experiences extends React.Component {
 	}
 
   	render() {
+		let snackbar = this.state.snackbar;
 		let topExp = [];
 		topExp = this.db.getTopExp(4);
 		return (
@@ -69,16 +71,16 @@ class Experiences extends React.Component {
 					<div className="main-Grid-wrapper main-column-grid">
 						<Grid container spacing={2} className="main-Grid-container">
 							<Grid item xs={12} md={7}>
-								<ExpTile exp={ExpTile.checkExpProps(topExp.length >= 1 ? topExp[0] : {})} db={this.db} />
+								<ExpTile exp={ExpTile.checkExpAndFill(topExp.length >= 1 ? topExp[0] : {})} db={this.db} />
 							</Grid>
 							<Grid item xs={12} md={5}>
-								<ExpTile exp={ExpTile.checkExpProps(topExp.length >= 2 ? topExp[1] : {})} db={this.db} />
+								<ExpTile exp={ExpTile.checkExpAndFill(topExp.length >= 2 ? topExp[1] : {})} db={this.db} />
 							</Grid>
 							<Grid item xs={12} md={8}>
-								<ExpTile exp={ExpTile.checkExpProps(topExp.length >= 3 ? topExp[2] : {})} db={this.db} />
+								<ExpTile exp={ExpTile.checkExpAndFill(topExp.length >= 3 ? topExp[2] : {})} db={this.db} />
 							</Grid>
 							<Grid item xs={12} md={4}>
-								<ExpTile exp={ExpTile.checkExpProps(topExp.length >= 4 ? topExp[3] : {})} db={this.db} />
+								<ExpTile exp={ExpTile.checkExpAndFill(topExp.length >= 4 ? topExp[3] : {})} db={this.db} />
 							</Grid>
 						</Grid>
 					</div>
@@ -87,8 +89,13 @@ class Experiences extends React.Component {
 							<button
 								className="button-primary"
 								onClick={(e) => {
-									if (!this.state.isNewExpOpen)
+									if (this.db.getCurrentUser().username === "Guest") {
+										this.setState({snackbar: {open: true, severity: "error", message: "You have to sign in to add experiences."}});
+										return;
+									}
+									if (!this.state.isNewExpOpen) {
 										this.setState({isNewExpOpen: true});
+									}
 								}}
 							>
 								Add experience
@@ -97,6 +104,12 @@ class Experiences extends React.Component {
 						</aside>
 					</div>
 				</div>
+				<MySnackbar 
+					open={snackbar.open} 
+					onClose={(e) => this.setState({snackbar: {open: false, severity: snackbar.severity, message: ""}})}
+					message={snackbar.message} 
+					severity={snackbar.severity}
+				/>
 				<Dialog
 					open={this.state.isNewExpOpen}
 					onClose={this.handlePopupClose.bind(this)}

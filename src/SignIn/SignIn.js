@@ -73,7 +73,7 @@ class SignIn extends React.Component {
 					<h2>Sign up</h2>
 					<span className="under-headline">Save all your favorite experiences!</span>
 					<form>
-						<div className="SignIn-flex">
+						<div className="flex">
 							<input name="username" placeholder="Username"/>
 							<input name="email" placeholder="Email" />
 							<input name="password" placeholder="Password" />
@@ -92,7 +92,7 @@ class SignIn extends React.Component {
 					<h2>Sign in</h2>
 					<span className="under-headline">Save all your favorite experiences!</span>
 					<form>
-						<div className="SignIn-flex">
+						<div className="flex">
 							<input name="username" placeholder="Username"/>
 							<input name="password" placeholder="Password" />
 							<button className="button-submit" onClick={this.onSignInSubmit.bind(this)}>Sign in</button>
@@ -103,7 +103,7 @@ class SignIn extends React.Component {
 			);
 		}
 		return (
-			<div className="SignIn">
+			<div className="SignIn form-dialog">
 				{form}
 				<MySnackbar 
 					open={snackbar.open} 

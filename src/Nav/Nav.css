@@ -49,7 +49,7 @@ nav li {
   background-color: #ddd;
 }
 
-.Nav-button-selected {
+.active .Nav-button {
   color: var(--color-primary);
   font-weight: 700;
 }
@@ -68,6 +68,10 @@ nav li {
   position: relative;
 }
 
+.Nav-user .wrapper {
+  padding: 16px;
+}
+
 .Nav-user button {
   border: none;
   background: inherit;
@@ -77,16 +81,15 @@ nav li {
   cursor: pointer;
 }
 
-.Nav-user img {
-  height: 64px;
-  width: 64px;
+.Nav-user .UserAvatar {
+  height: 32px;
+  width: 32px;
   border-radius: 50%;
-  padding: 16px;
   position: relative;
   top: -8px;
 }
 
-.Nav-user span {
+.Nav-username {
   display: inline-block;
   position: absolute;
   left: 0;
@@ -97,53 +100,6 @@ nav li {
   font-weight: 500;
 }
 
-.UserMenu {
-  position: absolute;
-  top: 100%;
-  left: 100%;
-  width: 300px;
-  transform: translate(-100%, 0);
-  background-color: #fff;
-  box-shadow: var(--mui-box-shadow);
-  padding: 40px 20px;
-}
 
-.UserMenu-flex {
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-	margin: auto;
-  justify-content: center;
-	padding: 0 8px;
-  gap: 4px;
-  align-items: stretch;
-  flex-wrap: nowrap;
-}
-
-.UserMenu-flex>button {
-  background-color: white;
-  width: 100%;
-  padding: 12px;
-  font-size: larger;
-}
-
-.UserMenu svg {
-  vertical-align: middle;
-}
-
-.UserMenu-flex>button:hover {
-  background-color: #ddd;
-}
-
-.button-logout {
-  color: white;
-  background-color: rgb(255, 64, 64) !important;
-  border-radius: 8px;
-}
-
-.button-logout:hover {
-  color: white;
-  background-color: rgb(168, 44, 44) !important;
-}
 
 

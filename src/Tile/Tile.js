@@ -1,9 +1,11 @@
 import React from "react";
 import '../common.css';
+import '../NewExperience/NewExperience.css';
 import "./Tile.css";
 import {AiFillHeart} from 'react-icons/all'
 import Dialog from '@mui/material/Dialog';
 import MySnackbar from "../MySnackbar";
+import User from "../User/User";
 
 class Tile extends React.Component{
 	constructor(props) {
@@ -62,6 +64,11 @@ class Tile extends React.Component{
 	}
 }
 
+function TagPill(props) {
+	return (
+		<span className="TagPill">{props.value}</span>
+	);
+}
 
 export class ExpTile extends React.Component {
 	constructor(props) {
@@ -69,35 +76,38 @@ export class ExpTile extends React.Component {
 		this.state = {isHeartPresent: false, snackbar: {open: false, severity: "info", message: ""}};
 	}
 
-	static checkExpProps(props) {
-		if (typeof props !== 'object' ||
-		Array.isArray(props) ||
-		props === null)
+	static checkExpAndFill(exp) {
+		if (typeof exp !== 'object' ||
+		Array.isArray(exp) ||
+		exp === null)
 		{	
-			props = {};
+			exp = {};
 		}
-		let propNames = ["id", "name", "country", "city", "username", "documentation", "budget", "transportation", "accomodation"];
+		let propNames = ["id", "name", "country", "city", "username", "description", "documentation", "budget", "transportation", "accomodation"];
 		propNames.forEach( (prop) => {
-			if (props[prop] === undefined) {
-				props[prop] = "";
+			if (exp[prop] === undefined) {
+				exp[prop] = "";
 			}
 		})
-		if (props.likes === undefined || !props.likes instanceof Set) {
-			props.likes = new Set();
+		if (exp.likes === undefined || !exp.likes instanceof Set) {
+			exp.likes = new Set();
 		}
-		if (props.usefulLinks === undefined || !Array.isArray(props.usefulLinks)) {
-			props.usefulLinks = [];
+		if (exp.usefulLinks === undefined || !Array.isArray(exp.usefulLinks)) {
+			exp.usefulLinks = [];
 		}
-		if (props.comments === undefined || !Array.isArray(props.comments)) {
-			props.comments = [];
+        if (exp.tags === undefined || !Array.isArray(exp.tags)) {
+			exp.tags = [];
 		}
-		return props;
+		if (exp.comments === undefined || !Array.isArray(exp.comments)) {
+			exp.comments = [];
+		}
+		return exp;
 	}
 
 	generateComment(props) {
 		return (
 			<div className="Tile-Dialog-Comment">
-				<span>@{props.username}</span><span> {props.date}</span>
+				<User user={this.props.db.getUser(props.username)}/><span> {props.date}</span>
 				<p>{props.content}</p>
 			</div>
 		);
@@ -135,10 +145,13 @@ export class ExpTile extends React.Component {
 		let comments = exp.comments.map( (comment) => {
 			return this.generateComment(comment);
 		});
+		let tags = exp.tags.map( (tag) => {
+			return <TagPill value={tag}/>;
+		});
 		let likeHeart = "";
 		if (this.state.isHeartPresent)
 			likeHeart = <AiFillHeart className="big-heart"/>
-		let attrNames = ["country", "city", "documentation", "budget", "transportation", "accomodation", "usefulLinks"];
+		let attrNames = ["country", "city", "description", "documentation", "budget", "transportation", "accomodation", "usefulLinks", "tags"];
 		let infoTableRows = attrNames.map( (attr) => {
 			let label = attr.charAt(0).toUpperCase() + attr.slice(1);
 			let content = exp[attr];
@@ -149,6 +162,9 @@ export class ExpTile extends React.Component {
 					break;
 				case "budget":
 					content = <span>Budget: {exp.budget.from}€-{exp.budget.to}€ Notes: {exp.budget.notes}</span>
+					break;
+				case "tags":
+					content = tags;
 					break;
 				default:
 					break;
@@ -164,17 +180,19 @@ export class ExpTile extends React.Component {
 			<div className="Tile-Dialog-flex">
 				<div className="Tile-Dialog-column-info">
 					<div style={{position: "relative"}}>
-						<img src={exp.img} alt={exp.h1} onDoubleClick={(e) => this.handleImageDoubleClick()}></img>
+						<img className="main-img" src={exp.img} alt={exp.h1} onDoubleClick={(e) => this.handleImageDoubleClick()}></img>
 						{likeHeart}
 					</div>
-					<h2>{exp.name}</h2>
-					<h3>@{exp.username}</h3>
-					<p><AiFillHeart/> {exp.likes.size}</p>
-					<table>
-						<tbody>
-							{infoTableRows}
-						</tbody>
-					</table>
+					<div className="wrapper">
+						<h2>{exp.name}</h2>
+						<User user={this.props.db.getUser(exp.username)}/>
+						<p><AiFillHeart/> {exp.likes.size}</p>
+						<table>
+							<tbody>
+								{infoTableRows}
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div className="Tile-Dialog-column-comments">
 					<div>
@@ -198,7 +216,7 @@ export class ExpTile extends React.Component {
 			<Tile 
 				type="exp" 
 				img={exp.img} 
-				h1={exp.city} 
+				h1={exp.name} 
 				h2={exp.username} 
 				likes={exp.likes.size}
 				popupElement={this.generatePopup()}

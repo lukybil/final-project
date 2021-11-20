@@ -42,3 +42,61 @@
 .Brand {
     position: relative;
 }
+
+.no-selection {
+    user-select: none; /* standard syntax */
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+.form-dialog {
+    min-width: 256px;
+    width: 600px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+@media only screen and (max-width: 600px ) {
+    .form-dialog {
+        width: 100%;
+    }
+}
+
+.form-dialog .under-headline {
+    color: #888;
+    display: block;
+    margin: 20px 0;
+}
+
+.flex {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-dialog .flex>* {
+    padding: 8px;
+    display: inline-block;
+    margin: 4px 0;
+    width: 320px;
+    max-width: 100%;
+    font-size: larger;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.form-dialog .button-submit {
+    background-color: var(--color-primary);
+    color: white;
+    margin-top: 20px;
+}
+
+.form-dialog .button-submit:hover {
+    cursor: pointer;
+    background-color: var(--color-primary-h);
+}

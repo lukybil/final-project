@@ -13,16 +13,7 @@
     cursor: pointer;
 }
 
-.NewExperience-flex {
-    display: flex;
-    flex-direction: column;
-    width: 80%;
-    margin: auto;
-    justify-content: center;
-    align-items: center;
-}
-
-.NewExperience-flex>* {
+.NewExperience .flex>* {
     padding: 8px;
     display: inline-block;
     margin: 4px 0;
@@ -35,4 +26,32 @@
 
 .NewExperience-flex textarea {
     resize: vertical;
+}
+
+.PillCheckbox,.TagPill {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.PillCheckbox:hover {
+    cursor: pointer;
+}
+
+.PillCheckbox input {
+    display: none;
+}
+
+.PillCheckbox span,.TagPill {
+    display: inline-block;
+    color: #555;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.PillCheckbox input:checked ~ span {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
 }
