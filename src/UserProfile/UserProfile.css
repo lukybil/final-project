@@ -3,8 +3,20 @@
 }
 
 .UserProfile h2 .UserAvatar {
-    height: 64px;
-    width: 64px;
-    font-size: 40px;
-    line-height: 64px;
+    height: 128px;
+    width: 128px;
+    font-size: 80px;
+    line-height: 80px;
+    vertical-align: middle;
+    margin-right: 16px;
+}
+
+
+.UserProfile h2 .UserAvatar span {
+    vertical-align: middle;
+}
+
+.UserProfile .Tabs {
+    width: fit-content;
+    margin: auto;
 }

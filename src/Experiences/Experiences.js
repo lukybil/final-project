@@ -10,6 +10,13 @@ import Dialog from '@mui/material/Dialog';
 import NewExperience from "../NewExperience/NewExperience";
 import MySnackbar from "../MySnackbar";
 
+/*
+This is the experiences menu page, at /experiences
+*/
+
+/**
+ * User row in the table for UserRanking
+ */
 function UserRow(props) {
 	return (
 		<tr className="UserRow" key={props.user.username}>
@@ -19,6 +26,9 @@ function UserRow(props) {
 	);
 }
 
+/**
+ * User ranking table, ranks users based on the accumulated number of likes among their experiences
+*/
 function UserRanking(props) {
 	let users = props.topUsers.map( (user) => {
 		return <UserRow user={user}/>
@@ -37,7 +47,9 @@ function UserRanking(props) {
 		</table>
 	);
 }
-
+/**
+ * Experiences class for showing 4 best rated experiences and the UserRanking
+ */
 class Experiences extends React.Component {
 	constructor(props) {
 		super(props);
@@ -45,7 +57,7 @@ class Experiences extends React.Component {
 		this.state = {isNewExpOpen: false, snackbar: {open: false, severity: "info", message: ""}};
 	}
 
-	componentDidMount() {
+	componentDidMount() { //updates itself, for the UserRanking to update
 		this.interval = setInterval(() => this.setState({}), 0.2 * 60 * 1000);
 	}
 
@@ -53,14 +65,14 @@ class Experiences extends React.Component {
 		clearInterval(this.interval);
 	}
 
-	handlePopupClose() {
+	handlePopupClose() { //generic method for closing popups
 		this.setState({isNewExpOpen: false});
 	}
 
   	render() {
 		let snackbar = this.state.snackbar;
 		let topExp = [];
-		topExp = this.db.getTopExp(4);
+		topExp = this.db.getTopExp(4); //gete 4 top experiences from the database to show in the grid
 		return (
 			<main className="Experiences">
 				<h2>Experiences</h2>
@@ -88,7 +100,7 @@ class Experiences extends React.Component {
 						<aside>
 							<button
 								className="button-primary"
-								onClick={(e) => {
+								onClick={(e) => { //create new experience button, works only for signed in users
 									if (this.db.getCurrentUser().username === "Guest") {
 										this.setState({snackbar: {open: true, severity: "error", message: "You have to sign in to add experiences."}});
 										return;
@@ -104,13 +116,13 @@ class Experiences extends React.Component {
 						</aside>
 					</div>
 				</div>
-				<MySnackbar 
+				<MySnackbar //snackbar object
 					open={snackbar.open} 
 					onClose={(e) => this.setState({snackbar: {open: false, severity: snackbar.severity, message: ""}})}
 					message={snackbar.message} 
 					severity={snackbar.severity}
 				/>
-				<Dialog
+				<Dialog //dialog object for showing the NewExperience form on add experience button click
 					open={this.state.isNewExpOpen}
 					onClose={this.handlePopupClose.bind(this)}
 					scroll={'paper'}

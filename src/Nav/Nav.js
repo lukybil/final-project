@@ -9,12 +9,16 @@ import {NavLink, Routes, Route} from 'react-router-dom';
 import { UserAvatar } from "../User/User";
 import UserMenu from '../UserMenu/UserMenu';
 
+import { FaMapMarkedAlt, FaPlane } from "react-icons/fa";
+import { AiFillHome } from "react-icons/ai";
+
 
 function NavButton(props) {
   return (
     <button 
       className="Nav-button"
-    >{props.text}
+    >
+      {props.picture} <span>{props.text}</span>
     </button>
   );
 }
@@ -38,13 +42,13 @@ class Nav extends React.Component {
     };
   }
 
-  generateMenuButton(name, isSelected) {
+  generateMenuButton(name, picture) {
     return (
       <li>
         <NavLink to={(name !== "Home" ? name.toLowerCase() : "/")} activeClassName="Nav-button-selected">
           <NavButton 
-            text={name} 
-            isSelected={isSelected}
+            text={name}
+            picture={picture}
           />
         </NavLink>
       </li>
@@ -85,7 +89,6 @@ class Nav extends React.Component {
 
   render() {
     let user = this.props.db.getCurrentUser();
-    let names = ["Home", "Destinations", "Experiences"];
     let snackbar = this.state.snackbar;
     let userPanel;
     let userMenu = 
@@ -130,9 +133,9 @@ class Nav extends React.Component {
           <Route path="/*" element={<Brand/>}/>
         </Routes>
         <ul>
-          {this.generateMenuButton(names[0], this.state.page===names[0])}
-          {this.generateMenuButton(names[1], this.state.page===names[1])}
-          {this.generateMenuButton(names[2], this.state.page===names[2])}
+          {this.generateMenuButton("Home", <AiFillHome/>)}
+          {this.generateMenuButton("Destinations",  <FaPlane/>)}
+          {this.generateMenuButton("Experiences", <FaMapMarkedAlt/>)}
           {!loggedIn ? this.generateSignInButton() : ""}
           {userPanel}
         </ul>

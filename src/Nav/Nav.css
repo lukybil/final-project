@@ -44,6 +44,23 @@ nav li {
   padding: 16px;
 }
 
+.Nav-button svg {
+  font-size: larger;
+  vertical-align: bottom;
+}
+
+@media only screen and (max-width: 600px) {
+  .Nav-button span {
+    display: none;
+  }
+  .Nav-button svg {
+    font-size: x-large;
+  }
+  nav .Brand h1 {
+    display: none;
+  }
+}
+
 .Nav-button:hover {
   cursor: pointer;
   background-color: #ddd;
