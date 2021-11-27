@@ -5,7 +5,7 @@ import '../User/User.css';
 import './UserMenu.css';
 
 import Dialog from '@mui/material/Dialog';
-import { UserAvatar } from "../User/User";
+import User from "../User/User";
 
 import { BiExit } from "react-icons/bi";
 import { IoMdSettings } from "react-icons/io";
@@ -87,8 +87,7 @@ class UserMenu extends React.Component {
         <div>
           <div className="UserMenu">
             <div className="UserMenu-flex">
-              <h3>{props.user.username}</h3>
-              <UserAvatar user={props.user} />
+              <User user={user} isWithUserCard={false} />
               <hr/>
               <button onClick={this.handleEditProfile.bind(this)}>Edit profile <FiEdit/></button>
               <button onClick={props.handleSettings}>Settings <IoMdSettings/></button>

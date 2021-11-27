@@ -9,7 +9,7 @@ nav {
   height: 64px;
   vertical-align: middle;
   padding: 0 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-subtle-border);
   z-index: 3;
 }
 
@@ -63,7 +63,7 @@ nav li {
 
 .Nav-button:hover {
   cursor: pointer;
-  background-color: #ddd;
+  background-color: var(--color-subtle-border);
 }
 
 .active .Nav-button {

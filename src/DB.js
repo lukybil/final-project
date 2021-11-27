@@ -7,6 +7,23 @@ import profileImg from "./img/default-profile-picture.png"
 import { ExpTile } from "./Tile/Tile";
 
 const guestUser = {username: "Guest", email: "none", profileImg: profileImg, numberLikes: 0};
+const deletedExp = {
+    id: -1,
+    name: "",
+    img: "",
+    country: "",
+    city: "", 
+    username: "",
+    description: ".",
+    likes: new Set([""]),
+    documentation: "",
+    budget: {from: -1, to: -1, notes: ""},
+    transportation: "",
+    accomodation: "",
+    usefulLinks: [],
+    tags: [],
+    comments: []
+};
 
 class User {
     constructor(data) {
@@ -51,8 +68,8 @@ class DB {
             usefulLinks: ["spain.com", "madrid.es"],
             tags: ["cultural", "rural", "historical", "business"],
             comments: [
-                {username: "kingkong", date: "2021-11-14 21:56:48", content: "Yo bro, very cool trip bro, wassup btw how ya doin bro, yo cool?"}, 
-                {username: "boris", date: "2021-11-15 15:01:03", content: "Hello broder, gud to see you."}
+                {username: "kingkong", date: new Date("2021-11-14 21:56:48"), content: "Yo bro, very cool trip bro, wassup btw how ya doin bro, yo cool?"}, 
+                {username: "boris", date: new Date("2021-11-15 15:01:03"), content: "Hello broder, gud to see you."}
             ]
         },
         {
@@ -71,7 +88,7 @@ class DB {
             usefulLinks: ["italy.com", "rome.it"],
             tags: ["cultural", "historical"],
             comments: [
-                {username: "kingkong", date: "2021-11-17 21:40:32", content: "Hi so did you like it bra?"}
+                {username: "kingkong", date: new Date("2021-11-17 21:40:32"), content: "Hi so did you like it bra?"}
             ]
         }
 
@@ -116,6 +133,9 @@ class DB {
             this.experiences = protoExperiences;
             this.experiences.forEach((exp) => {
                 exp.likes = new Set(exp.likes);
+                exp.comments.forEach( (comment) => {
+                    comment.date = new Date(comment.date);
+                });
             });
         }
         if (protoCurrentUser !== null)
@@ -160,6 +180,10 @@ class DB {
 
     getTopExp(amount) {
         let topExp = [...this.experiences];
+        for (let i = 0; i < topExp.length; i++) {
+            if (topExp[i].id === -1)
+                topExp.splice(i, 1);
+        }
         topExp.sort((a, b) => b.likes.size - a.likes.size);
         topExp = topExp.slice(0, amount);
         return topExp;
@@ -175,6 +199,8 @@ class DB {
             return false;
         });*/
         exp = this.experiences[id];
+        if (exp.id === -1)
+            return null;
         return exp;
     }
 
@@ -184,6 +210,13 @@ class DB {
         exp.id = this.nextExpId++;
         if (exp !== undefined)
             this.experiences.push(exp);
+    }
+
+    deleteExp(id) {
+        let exp = this.experiences[id];
+        if (exp.id === id && exp.username === this.currentUser.username) {
+            this.experiences[id] = deletedExp;
+        }
     }
 
     likeExp(id) {
@@ -275,6 +308,15 @@ class DB {
         });
         userExps.sort((a, b) => b.likes.size - a.likes.size);
         return userExps;
+    }
+
+    dateToFullFormat(date) {
+        return date.getDate().toString().padStart(2, '0')  + "-" + (date.getMonth()+1).toString().padStart(2, '0') + "-" + date.getFullYear().toString().padStart(2, '0') + " " + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+    }
+
+    postComment(expId, content) {
+        let exp = this.getExpById(expId);
+        exp.comments.push({username: this.getCurrentUser().username, date: new Date(), content: content});
     }
 }
 

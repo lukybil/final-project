@@ -8,6 +8,8 @@ import Home from './Home/Home';
 import Experiences from './Experiences/Experiences';
 import {Routes , Route} from 'react-router-dom';
 import UserProfile from './UserProfile/UserProfile';
+import NotificationInterface from './NotificationProvider/NotificationInterface';
+import NotificationProvider from './NotificationProvider/NotificationProvider';
 
 function Logo(props) {
   return (
@@ -50,6 +52,7 @@ class App extends React.Component {
     super(props);
     this.db = new DB(this.setCurrentUser.bind(this))
     this.state = {user: this.db.getCurrentUser(), isDatabaseLoaded: false};
+    console.log(this.props);
   }
 
   setCurrentUser(newUser) {
@@ -66,19 +69,23 @@ class App extends React.Component {
   render() {
     let pageContent;
     return (
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Header/>}/>
-        </Routes>
-        <Nav db={this.db}/>
-        <Routes >
-          <Route path="/destinations" element={<span>Destinations</span>}/>
-          <Route path="/experiences" element={<Experiences db={this.db}/>}/>
-          <Route path="/userProfile/:username" element={<UserProfile db={this.db}/>}/>      
-          <Route path="/" element={<Home/>} />
-        </Routes >
-        {pageContent}
-      </div>
+      <NotificationProvider>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Header/>}/>
+          </Routes>
+          <Nav db={this.db}/>
+          <button onClick={e => this.props.addSnackbar("Mounted", "info")}>Test</button>
+          <Routes >
+            <Route path="/destinations" element={<span>Destinations</span>}/>
+            <Route path="/experiences" element={<Experiences db={this.db}/>}/>
+            <Route path="/userProfile/:username" element={<UserProfile db={this.db}/>}/>      
+            <Route path="/" element={<Home/>} />
+          </Routes >
+          {pageContent}
+        </div>
+        <NotificationInterface />
+      </NotificationProvider>
     );
   };
 }

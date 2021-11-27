@@ -1,5 +1,5 @@
 import {Snackbar, Alert} from '@mui/material';
-import React from 'react';
+import React from "react";
 
 /* Example use
 <MySnackbar 
@@ -20,27 +20,6 @@ class MySnackbar extends React.Component {
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
 			>
 				<Alert onClose={this.props.onClose} severity={this.props.severity} sx={{ width: '100%' }}>
-					{this.props.message}
-				</Alert>
-			</Snackbar>
-		);
-	}
-}
-
-export class QuickMySnackbar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {open: this.props.open};
-	}
-	render() {
-		return (
-			<Snackbar 
-				open={this.state.open} 
-				autoHideDuration={6000} 
-				onClose={(e) => this.setState({open: false})}
-				anchorOrigin={{ vertical: "top", horizontal: "center" }}
-			>
-				<Alert onClose={(e) => this.setState({open: false})} severity={this.props.severity} sx={{ width: '100%' }}>
 					{this.props.message}
 				</Alert>
 			</Snackbar>

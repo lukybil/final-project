@@ -6,6 +6,8 @@ import {AiFillHeart} from 'react-icons/all'
 import Dialog from '@mui/material/Dialog';
 import MySnackbar from "../MySnackbar";
 import User from "../User/User";
+import { BsFillTrashFill } from "react-icons/bs";
+import { IoSend } from "react-icons/io5";
 
 class Tile extends React.Component{
 	constructor(props) {
@@ -107,7 +109,7 @@ export class ExpTile extends React.Component {
 	generateComment(props) {
 		return (
 			<div className="Tile-Dialog-Comment">
-				<User user={this.props.db.getUser(props.username)}/><span> {props.date}</span>
+				<User user={this.props.db.getUser(props.username)}/><span> {this.props.db.dateToFullFormat(props.date)}</span>
 				<p>{props.content}</p>
 			</div>
 		);
@@ -136,15 +138,23 @@ export class ExpTile extends React.Component {
 		this.setState({snackbar: {open: false, severity: this.state.snackbar.severity, message: ""}})
 	}
 
+	deleteExp() {
+		this.props.db.deleteExp(this.props.exp.id);
+	}
+
 	generatePopup() {
 		let snackbar = this.state.snackbar;
 		const exp = this.props.exp;
 		let usefulLinks = exp.usefulLinks.map( (link) => {
 			return <span><a href={link}>{link}</a><br></br></span>
 		});
-		let comments = exp.comments.map( (comment) => {
+		/*let comments = exp.comments.map( (comment) => {
 			return this.generateComment(comment);
-		});
+		});*/
+		let comments = [];
+		for (let i = exp.comments.length - 1; i >= 0; i--) {
+			comments.push(this.generateComment(exp.comments[i]));
+		}
 		let tags = exp.tags.map( (tag) => {
 			return <TagPill value={tag}/>;
 		});
@@ -187,6 +197,7 @@ export class ExpTile extends React.Component {
 						<h2>{exp.name}</h2>
 						<User user={this.props.db.getUser(exp.username)}/>
 						<p><AiFillHeart/> {exp.likes.size}</p>
+						<button onClick={this.deleteExp.bind(this)}><BsFillTrashFill /></button>
 						<table>
 							<tbody>
 								{infoTableRows}
@@ -197,6 +208,19 @@ export class ExpTile extends React.Component {
 				<div className="Tile-Dialog-column-comments">
 					<div>
 						<h3>Comments</h3>
+						<span className="input-with-send">
+							<input type="text"/>
+							<button 
+								onClick={ e => {
+									let input = e.target.closest(".input-with-send").querySelector("input");
+									this.props.db.postComment(exp.id, input.value);
+									input.value = "";
+									this.setState({});
+								}}
+							>
+								<IoSend />
+							</button>
+						</span>
 						{comments}
 					</div>
 				</div>

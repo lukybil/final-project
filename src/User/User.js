@@ -23,8 +23,19 @@ class User extends React.Component {
 
   render() {
     let user = this.props.user;
+    let isWithUserCard = this.props.isWithUserCard === undefined ? true : false;
+    let userCard = "";
     if (user === undefined) {
       return <span>User undefined</span>;
+    }
+    if (isWithUserCard) {
+      userCard = (
+        <div className="User-card">
+          <UserAvatar user={user}/>
+          <span>{user.username}</span>
+          <span><AiFillHeart/>{user.numberLikes}</span>
+        </div>
+      );
     }
     return (
       <div className="User">
@@ -33,11 +44,7 @@ class User extends React.Component {
             <UserAvatar user={user}/>
             <span className="username">{user.username}</span>
           </span>
-          <div className="User-card">
-            <UserAvatar user={user}/>
-            <span>{user.username}</span>
-            <span><AiFillHeart/>{user.numberLikes}</span>
-          </div>
+          {userCard}
         </Link>
       </div>
     );

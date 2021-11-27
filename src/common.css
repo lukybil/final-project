@@ -3,6 +3,8 @@
     --color-anti-primary: #FBD872;
     --color-secondary: #DBF2FF;
     
+    --color-subtle-border: #ccc;
+
     --color-primary-h: #8f71e0;
     --color-anti-primary-h: #ffeaac;
 
@@ -87,7 +89,7 @@
     max-width: 100%;
     font-size: larger;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-subtle-border);
 }
 
 .form-dialog .button-submit {

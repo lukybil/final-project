@@ -8,6 +8,7 @@ import "./Experiences.css";
 import {AiFillHeart} from 'react-icons/all'
 import Dialog from '@mui/material/Dialog';
 import NewExperience from "../NewExperience/NewExperience";
+import withHooks from '../withHooks';
 import MySnackbar from "../MySnackbar";
 
 /*
@@ -59,6 +60,7 @@ class Experiences extends React.Component {
 
 	componentDidMount() { //updates itself, for the UserRanking to update
 		this.interval = setInterval(() => this.setState({}), 0.2 * 60 * 1000);
+		this.props.addSnackbar("Hey!!!!", "info");
 	}
 
 	componentWillUnmount() {
@@ -138,4 +140,4 @@ class Experiences extends React.Component {
 	}
 }
 
-export default Experiences;
+export default withHooks(Experiences);
