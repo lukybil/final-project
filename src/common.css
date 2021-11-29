@@ -102,3 +102,8 @@
     cursor: pointer;
     background-color: var(--color-primary-h);
 }
+
+.date {
+    font-size: smaller;
+    color: #888;
+}

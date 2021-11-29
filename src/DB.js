@@ -4,7 +4,7 @@ import Vienna from "./img/content/vienna.jpg";
 import London from "./img/content/london.jpg";
 
 import profileImg from "./img/default-profile-picture.png"
-import { ExpTile } from "./Tile/Tile";
+import {checkExpAndFill} from "./Tile/Tile";
 
 const guestUser = {username: "Guest", email: "none", profileImg: profileImg, numberLikes: 0};
 const deletedExp = {
@@ -174,6 +174,10 @@ class DB {
         this.usersMap = newUsersMap;
     }
 
+    isSignedIn() {
+        return this.getCurrentUser().username !== "Guest";
+    }
+
     getTopUsers() {
         return this.topUsersList;
     }
@@ -205,7 +209,7 @@ class DB {
     }
 
     addExp(exp) {
-        ExpTile.checkExpAndFill(exp);
+        checkExpAndFill(exp);
         console.log(exp);
         exp.id = this.nextExpId++;
         if (exp !== undefined)
@@ -315,6 +319,8 @@ class DB {
     }
 
     postComment(expId, content) {
+        if (!this.isSignedIn())
+            return;
         let exp = this.getExpById(expId);
         exp.comments.push({username: this.getCurrentUser().username, date: new Date(), content: content});
     }

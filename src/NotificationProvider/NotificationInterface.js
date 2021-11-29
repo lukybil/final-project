@@ -5,12 +5,12 @@ export default function NotificationInterface() {
   const { snackbar, removeSnackbar } = useNotificationProvider();
 
   const handleClose = () => {
-    removeSnackbar();
+    removeSnackbar(snackbar.severity, snackbar.message);
   };
 
   return (
     <MySnackbar 
-        open={!!snackbar} 
+        open={snackbar?.open} 
         message={snackbar?.message} 
         severity={snackbar?.severity} 
         onClose={handleClose}

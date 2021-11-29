@@ -11,7 +11,7 @@ import { BiExit } from "react-icons/bi";
 import { IoMdSettings } from "react-icons/io";
 import { FiEdit } from "react-icons/fi";
 import ClickAwayListener from "@mui/core/ClickAwayListener";
-import MySnackbar from '../MySnackbar';
+import withHooks from '../withHooks';
 
 class UserMenu extends React.Component {
   constructor(props) {
@@ -19,8 +19,7 @@ class UserMenu extends React.Component {
     this.state = {
       isEditProfileOpen: false, 
       mixedColors: this.props.user.defaultAvatarColor, 
-      newProfileImg: this.props.user.profileImg,
-      snackbar: {open: false, severity: "info", message: ""}
+      newProfileImg: this.props.user.profileImg
     };
   }
 
@@ -36,14 +35,10 @@ class UserMenu extends React.Component {
     return document.querySelector("input[name=" + name + "]")?.value;
   }
 
-  openSnackbar(severity, message) {
-    this.setState({snackbar: {open: true, severity: severity, message: message}});
-  }
-
   onEditProfileSubmit(e) {
     e.preventDefault();
     if (this.props.db.getUser(this.props.user.username).password !== this.getValueByName("currentPassword")) {
-      this.openSnackbar("error", "Wrong current password.");
+      this.props.addSnackbar("error", "Wrong current password.");
       return;
     }
     let newUser = JSON.parse(JSON.stringify(this.props.db.getUser(this.props.user.username)));
@@ -57,13 +52,13 @@ class UserMenu extends React.Component {
         newUser.password = password;
       }
       else {
-        this.openSnackbar("error", "New passwords do not match");
+        this.props.addSnackbar("error", "New passwords do not match");
         return;
       }
     }
     
     this.props.db.updateUser(newUser);
-    this.openSnackbar("success", "User data updated.");
+    this.props.addSnackbar("success", "User data updated.");
   }
 
   onColorChange(e) {
@@ -81,7 +76,6 @@ class UserMenu extends React.Component {
   render() {
     let props = this.props;
     let user = this.props.user;
-    let snackbar = this.state.snackbar;
     return (
       <ClickAwayListener onClickAway={props.handleClickAway}>
         <div>
@@ -126,12 +120,6 @@ class UserMenu extends React.Component {
                   <button className="button-submit" onClick={this.onEditProfileSubmit.bind(this)}>Save changes</button>
                 </div>
               </form>
-              <MySnackbar 
-                open={snackbar.open} 
-                onClose={(e) => this.setState({snackbar: {open: false, severity: this.state.snackbar.severity}})} 
-                message={snackbar.message} 
-                severity={snackbar.severity}
-              />
             </div>
           </Dialog>
         </div>
@@ -141,7 +129,7 @@ class UserMenu extends React.Component {
   
 }
 
-export default UserMenu;
+export default withHooks(UserMenu);
 
 /*
 <input type="number" className="input-avatar-color" name="red" min="0" max="255" placeholder="R" onChange={this.onColorChange.bind(this)}/>

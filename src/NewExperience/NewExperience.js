@@ -1,7 +1,8 @@
-import React from "react"
-import MySnackbar from "../MySnackbar";
+import React from "react";
 import '../common.css';
 import './NewExperience.css';
+import withHooks from "../withHooks";
+import restrictAccess from "../decorators/restrictAccess";
 
 const fileToDataUri = (file) => new Promise((resolve, reject) => {
 	const reader = new FileReader();
@@ -23,7 +24,7 @@ function PillCheckbox(props) {
 class NewExperience extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {snackbar: {open: false, severity: "info", message: ""}, mainImg: ""};
+		this.state = {mainImg: ""};
 		this.db = props.db;
 	}
 
@@ -46,7 +47,7 @@ class NewExperience extends React.Component {
 		e.preventDefault();
 		let username;
 		if ((username = this.db.getCurrentUser().username) === "Guest") {
-			this.setState({snackbar: {open: true, message: "You have to sign in to add experiences.", severity: "info"}});
+			this.props.addSnackbar("info", "You have to sign in to add experiences.")
 			return;
 		}
 		let names = ["name", "img", "country", "city", "description", "documentation", "budget", "transportation", "accomodation"];
@@ -61,27 +62,16 @@ class NewExperience extends React.Component {
 			exp.tags.push(input.value);
 		});
 		this.db.addExp(exp);
-		this.setState({snackbar: {open: true, message: "Experience added successfully!", severity: "success"}});
-	}
-
-	handleSnackbarClose() {
-		this.setState({snackbar: {open: false, severity: this.state.snackbar.severity}});
+		this.props.addSnackbar("success", "Experience added successfully");
 	}
 
 	render() {
-		let snackbar = this.state.snackbar;
 		let tags = ["cultural", "rural", "historical", "business", "environmental", "eco-tourism"];
 		let tagPills = tags.map( (tag) => {
 			return <PillCheckbox value={tag} />
 		});
 		return (
 			<div className="NewExperience">
-				<MySnackbar 
-					open={snackbar.open} 
-					onClose={this.handleSnackbarClose.bind(this)} 
-					message={snackbar.message} 
-					severity={snackbar.severity}
-				/>
 				<form>
 					<h2>Add Experience</h2>
 					<div className="flex">
@@ -99,7 +89,7 @@ class NewExperience extends React.Component {
 						<textarea id="newExpAccomodation" name="accomodation" placeholder="Accomodation"></textarea>
 						<textarea id="newExpUsefulLinks" name="usefulLinks" placeholder="Useful links"></textarea>
 						<div>{tagPills}</div>
-						<button className="button-primary" onClick={this.onSubmit.bind(this)}>Add experience</button>
+						<button className="button-primary" onClick={e => this.onSubmit(e)}>Add experience</button>
 					</div>
 				</form>
 			</div>
@@ -107,7 +97,7 @@ class NewExperience extends React.Component {
 	}
 }
 
-export default NewExperience
+export default withHooks(NewExperience);
 
 /*
 

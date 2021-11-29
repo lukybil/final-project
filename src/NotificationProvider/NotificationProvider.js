@@ -9,14 +9,14 @@ export const NotificationProviderContext = React.createContext({
 export default function NotificationProvider({ children }) {
   const [snackbar, setSnackbar] = useState(null);
 
-  const removeSnackbar = () => setSnackbar(null);
+  const removeSnackbar = (severity, message) => setSnackbar({ open: false, severity, message });
 
-  const addSnackbar = (message, severity) => {setSnackbar({ message, severity }); console.log("addSnackbar triggered.")};
+  const addSnackbar = (severity, message) => setSnackbar({ open: true, severity, message });
 
   const contextValue = {
     snackbar,
-    addSnackbar: useCallback((message, severity) => addSnackbar(message, severity), []),
-    removeSnackbar: useCallback(() => removeSnackbar(), [])
+    addSnackbar: useCallback((severity, message) => addSnackbar(severity, message), []),
+    removeSnackbar: useCallback((severity, message) => removeSnackbar(severity, message), [])
   };
 
   return (

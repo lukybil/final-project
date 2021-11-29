@@ -11,6 +11,7 @@ import UserMenu from '../UserMenu/UserMenu';
 
 import { FaMapMarkedAlt, FaPlane } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
+import withHooks from "../withHooks";
 
 
 function NavButton(props) {
@@ -78,9 +79,9 @@ class Nav extends React.Component {
   handleSignOut() {
     this.props.db.logoutUser();
     this.setState({
-      isUserMenuOpen: false, 
-      snackbar: {open: true, severity: "success", message: "Bye!"}
+      isUserMenuOpen: false
     });
+    this.props.addSnackbar("success", "Bye!");
   }
 
   handleEditProfile() {
@@ -89,7 +90,6 @@ class Nav extends React.Component {
 
   render() {
     let user = this.props.db.getCurrentUser();
-    let snackbar = this.state.snackbar;
     let userPanel;
     let userMenu = 
       <UserMenu
@@ -150,15 +150,9 @@ class Nav extends React.Component {
 				>
           <SignIn db={this.props.db} setNavState={this.setState.bind(this)}/>
 				</Dialog>
-				<MySnackbar 
-					open={snackbar.open} 
-					onClose={this.handleSnackbarClose.bind(this)} 
-					message={snackbar.message} 
-					severity={snackbar.severity}
-				/>
       </nav>
     );
   }
 }
 
-export default Nav;
+export default withHooks(Nav);

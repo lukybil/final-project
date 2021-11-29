@@ -1,0 +1,91 @@
+footer {
+    margin-top: 10px;
+    /*background-color: rgba(65, 224, 230, 0.5);*/
+    background-color: var(--color-primary);
+    color: white;
+}
+
+a[class*="icon-"] {
+    display: inline-block;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 32px;
+    line-height: 32px;
+    color: white;
+    vertical-align: middle;
+    width: 52px;
+    height: 52px;
+}
+
+.icon-facebook {
+    background: #4267B2;
+}
+
+.icon-instagram {
+    background: linear-gradient(225deg, #405DE6, #833AB4, #E1306C, #F77737, #FFDC80);
+}
+
+.icon-twitter {
+    color: #1DA1F2 !important;
+    background-color: white;
+}
+
+footer .ul-icons li {
+    display: inline-block;
+}
+
+footer i {
+    font-size: 30px;
+    line-height: 30px;
+}
+
+footer .flex {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 200px;
+}
+
+.column-logo {
+    flex: 45%;
+}
+
+.column-logo img {
+    width: 80px;
+    height: 80px;
+}
+
+.column-authors {
+    flex: 15%;
+    width: 100%;
+}
+
+.column-links {
+    flex: 15%;
+    width: 100%;
+}
+
+.column-icons {
+    flex: 25%;
+    width: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+    footer .flex div[class*="column-"]{
+        flex: 100%;
+        padding: 15px;
+    }
+    footer {
+        padding-bottom: 20px;
+    }
+}
+
+.ul-links li {
+    display: block;
+}
+
+.ul-links a {
+    color: white;
+}

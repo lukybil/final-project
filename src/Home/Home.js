@@ -2,7 +2,7 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import '../common.css';
 import "./Home.css";
-import Tile from "../Tile/Tile";
+import {Tile} from "../Tile/Tile";
 import Athens from "../img/content/athens.jpg";
 import Madrid from "../img/content/madrid.jpg";
 import Vienna from "../img/content/vienna.jpg";

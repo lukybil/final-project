@@ -4,12 +4,12 @@ import '../NewExperience/NewExperience.css';
 import "./Tile.css";
 import {AiFillHeart} from 'react-icons/all'
 import Dialog from '@mui/material/Dialog';
-import MySnackbar from "../MySnackbar";
 import User from "../User/User";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
+import withHooks from "../withHooks";
 
-class Tile extends React.Component{
+export class Tile extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {isPopupOpen: false};
@@ -72,44 +72,65 @@ function TagPill(props) {
 	);
 }
 
+export function checkExpAndFill(exp) {
+	if (typeof exp !== 'object' ||
+	Array.isArray(exp) ||
+	exp === null)
+	{	
+		exp = {};
+	}
+	let propNames = ["id", "name", "country", "city", "username", "description", "documentation", "budget", "transportation", "accomodation"];
+	propNames.forEach( (prop) => {
+		if (exp[prop] === undefined) {
+			exp[prop] = "";
+		}
+	})
+	if (exp.likes === undefined || !exp.likes instanceof Set) {
+		exp.likes = new Set();
+	}
+	if (exp.usefulLinks === undefined || !Array.isArray(exp.usefulLinks)) {
+		exp.usefulLinks = [];
+	}
+	if (exp.tags === undefined || !Array.isArray(exp.tags)) {
+		exp.tags = [];
+	}
+	if (exp.comments === undefined || !Array.isArray(exp.comments)) {
+		exp.comments = [];
+	}
+	return exp;
+}
+
+function InputWithSend(props) {
+	return (
+		<span className="input-with-send">
+			<input type="text"/>
+			<button 
+				onClick={ e => {
+					let input = e.target.closest(".input-with-send").querySelector("input");
+					props.db.postComment(props.exp.id, input.value);
+					input.value = "";
+					props.setState({});
+				}}
+			>
+				<IoSend />
+			</button>
+		</span>
+	);
+}
+
 export class ExpTile extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {isHeartPresent: false, snackbar: {open: false, severity: "info", message: ""}};
+		this.state = {isHeartPresent: false};
 	}
 
-	static checkExpAndFill(exp) {
-		if (typeof exp !== 'object' ||
-		Array.isArray(exp) ||
-		exp === null)
-		{	
-			exp = {};
-		}
-		let propNames = ["id", "name", "country", "city", "username", "description", "documentation", "budget", "transportation", "accomodation"];
-		propNames.forEach( (prop) => {
-			if (exp[prop] === undefined) {
-				exp[prop] = "";
-			}
-		})
-		if (exp.likes === undefined || !exp.likes instanceof Set) {
-			exp.likes = new Set();
-		}
-		if (exp.usefulLinks === undefined || !Array.isArray(exp.usefulLinks)) {
-			exp.usefulLinks = [];
-		}
-        if (exp.tags === undefined || !Array.isArray(exp.tags)) {
-			exp.tags = [];
-		}
-		if (exp.comments === undefined || !Array.isArray(exp.comments)) {
-			exp.comments = [];
-		}
-		return exp;
-	}
+	
 
 	generateComment(props) {
 		return (
 			<div className="Tile-Dialog-Comment">
-				<User user={this.props.db.getUser(props.username)}/><span> {this.props.db.dateToFullFormat(props.date)}</span>
+				<User user={this.props.db.getUser(props.username)}/>
+				<span className="date"> {this.props.db.dateToFullFormat(props.date)}</span>
 				<p>{props.content}</p>
 			</div>
 		);
@@ -131,11 +152,8 @@ export class ExpTile extends React.Component {
 	}
 
 	openSignInNeedSnackbar() {
-		this.setState({snackbar: {open: true, severity: "error", message: "You have to sign in to perform that action."}});
-	}
-
-	handleSnackbarClose() {
-		this.setState({snackbar: {open: false, severity: this.state.snackbar.severity, message: ""}})
+		console.log(this);
+		this.props.addSnackbar("error", "You have to sign in to perform that action.");
 	}
 
 	deleteExp() {
@@ -143,7 +161,6 @@ export class ExpTile extends React.Component {
 	}
 
 	generatePopup() {
-		let snackbar = this.state.snackbar;
 		const exp = this.props.exp;
 		let usefulLinks = exp.usefulLinks.map( (link) => {
 			return <span><a href={link}>{link}</a><br></br></span>
@@ -208,28 +225,12 @@ export class ExpTile extends React.Component {
 				<div className="Tile-Dialog-column-comments">
 					<div>
 						<h3>Comments</h3>
-						<span className="input-with-send">
-							<input type="text"/>
-							<button 
-								onClick={ e => {
-									let input = e.target.closest(".input-with-send").querySelector("input");
-									this.props.db.postComment(exp.id, input.value);
-									input.value = "";
-									this.setState({});
-								}}
-							>
-								<IoSend />
-							</button>
-						</span>
+						{this.props.db.getCurrentUser().username !== "Guest" 
+							? <InputWithSend exp={exp} db={this.props.db} setState={this.setState.bind(this)}/> 
+							: ""}
 						{comments}
 					</div>
 				</div>
-				<MySnackbar //to tell user to login
-					open={snackbar.open} 
-					onClose={this.handleSnackbarClose.bind(this)} 
-					message={snackbar.message} 
-					severity={snackbar.severity}
-				/>
 			</div>
 		);
 	}
@@ -249,7 +250,7 @@ export class ExpTile extends React.Component {
 	}
 }
 
-export default Tile;
+export default withHooks(ExpTile);
 
 /*
 

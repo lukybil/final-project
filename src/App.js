@@ -8,10 +8,11 @@ import Home from './Home/Home';
 import Experiences from './Experiences/Experiences';
 import {Routes , Route} from 'react-router-dom';
 import UserProfile from './UserProfile/UserProfile';
+import Footer from './Footer/Footer';
 import NotificationInterface from './NotificationProvider/NotificationInterface';
 import NotificationProvider from './NotificationProvider/NotificationProvider';
 
-function Logo(props) {
+export function Logo(props) {
   return (
     <img src={logo} alt="logo" className="Logo"></img>
   );
@@ -75,7 +76,6 @@ class App extends React.Component {
             <Route path="/" element={<Header/>}/>
           </Routes>
           <Nav db={this.db}/>
-          <button onClick={e => this.props.addSnackbar("Mounted", "info")}>Test</button>
           <Routes >
             <Route path="/destinations" element={<span>Destinations</span>}/>
             <Route path="/experiences" element={<Experiences db={this.db}/>}/>
@@ -84,6 +84,7 @@ class App extends React.Component {
           </Routes >
           {pageContent}
         </div>
+        <Footer />
         <NotificationInterface />
       </NotificationProvider>
     );

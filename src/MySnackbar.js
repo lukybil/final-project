@@ -15,9 +15,10 @@ class MySnackbar extends React.Component {
 		return (
 			<Snackbar 
 				open={this.props.open} 
-				autoHideDuration={6000} 
+				autoHideDuration={this.props.message?.length * 50 + 1000} 
 				onClose={this.props.onClose}
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
+				ClickAwayListenerProps={{onClickAway: () => {}}}
 			>
 				<Alert onClose={this.props.onClose} severity={this.props.severity} sx={{ width: '100%' }}>
 					{this.props.message}

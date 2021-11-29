@@ -1,12 +1,12 @@
 import React from 'react';
-import MySnackbar from '../MySnackbar';
 import '../common.css';
 import './SignIn.css';
+import withHooks from '../withHooks';
 
 class SignIn extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {snackbar: {open: false, severity: "info", message: ""}, isFormSignIn: true};
+		this.state = {isFormSignIn: true};
 	}
 
 	onSignupSubmit(e) {
@@ -18,11 +18,11 @@ class SignIn extends React.Component {
 		});
 		let message;
 		if ((message = this.props.db.signupUser(user)) === "") {
-			this.openNavSnackbar("success", "Signup successful!");
+			this.props.addSnackbar("success", "Sign in successfull!");
 			this.onFormSuccess();
 		}
 		else {
-			this.setState({snackbar: {open: true, severity: "error", message: message}});
+			this.props.addSnackbar("error", message);
 		}
 	}
 
@@ -33,24 +33,16 @@ class SignIn extends React.Component {
 		password = document.querySelector(".SignIn input[name=password]")?.value;
 		let user;
 		if ((user = this.props.db.signInUser(username, password)) !== null) {
-			this.openNavSnackbar("success", "Welcome back, " + user?.username + "!");
+			this.props.addSnackbar("success", "Welcome back, " + user?.username + "!");
 			this.onFormSuccess();
 		}
 		else {
-			this.setState({snackbar: {open: true, severity: "error", message: "Sign in unsuccessful."}});
+			this.props.addSnackbar("error", "Sign in unsuccessful.");
 		}
 	}
 
 	onFormSuccess() {
 		this.props.setNavState({isSignInOpen: false});
-	}
-
-	openNavSnackbar(severity, message) {
-		this.props.setNavState({snackbar: {open: true, severity: severity, message: message}});
-	}
-
-	handleSnackbarClose() {
-		this.setState({snackbar: {open: false, severity: this.state.snackbar.severity}});
 	}
 
 	genSwitchButton(text) {
@@ -65,7 +57,6 @@ class SignIn extends React.Component {
 	}
 
   render() {
-		const {snackbar} = this.state;
 		let form;
 		if (this.state.isFormSignIn === false) {
 			form = (
@@ -105,12 +96,6 @@ class SignIn extends React.Component {
 		return (
 			<div className="SignIn form-dialog">
 				{form}
-				<MySnackbar 
-					open={snackbar.open} 
-					onClose={this.handleSnackbarClose.bind(this)} 
-					message={snackbar.message} 
-					severity={snackbar.severity}
-				/>
 			</div>
 		);
   }
@@ -132,4 +117,4 @@ class SignIn extends React.Component {
 
 */
 
-export default SignIn;
+export default withHooks(SignIn);
