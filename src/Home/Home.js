@@ -2,6 +2,7 @@ import React from "react";
 import Grid from "@mui/material/Grid";
 import '../common.css';
 import "./Home.css";
+import Search from "../Search/Search";
 import {Tile} from "../Tile/Tile";
 import Athens from "../img/content/athens.jpg";
 import Madrid from "../img/content/madrid.jpg";
@@ -17,9 +18,7 @@ class Home extends React.Component {
 		return (
 			<main className="Home">
 				<h2>Find your perfect trip</h2>
-				<form>
-					<input type="text" className="main-search" placeholder="author, name, location,..."/>
-				</form>
+				<Search />
 				<div className="main-Grid-wrapper">
 					<Grid container spacing={2}>
 						<Grid item xs={12} md={8}>

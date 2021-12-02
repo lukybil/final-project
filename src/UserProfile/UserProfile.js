@@ -7,6 +7,7 @@ import ExpTile, {checkExpAndFill} from "../Tile/Tile";
 import { useParams } from 'react-router';
 import { UserAvatar } from '../User/User';
 import { Tabs, Tab } from '@mui/material';
+import withHooks from '../withHooks';
 //import {withRouter} from '../App';
 
 export const withRouter = WrappedComponent => props => {
@@ -80,4 +81,4 @@ class UserProfile extends React.Component {
   }
 }
 
-export default withRouter(UserProfile);
+export default withHooks(withRouter(UserProfile));

@@ -100,10 +100,10 @@ export function checkExpAndFill(exp) {
 	return exp;
 }
 
-function InputWithSend(props) {
+export function InputWithSend(props) {
 	return (
 		<span className="input-with-send">
-			<input type="text"/>
+			<input type="text" className="main-search"/>
 			<button 
 				onClick={ e => {
 					let input = e.target.closest(".input-with-send").querySelector("input");

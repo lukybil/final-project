@@ -91,30 +91,6 @@
     margin: 20px 0;
 }
 
-.input-with-send {
-    display: inline-block;
-    --border-radius: 16px;
-    border-radius: var(--border-radius);
-    width: 100%;
-}
-.input-with-send input {
-    border-radius: var(--border-radius) 0 0 var(--border-radius);
-    border: 1px solid var(--color-subtle-border);
-    padding: 8px;
-    width: calc(100% - 40px);
-}
-.input-with-send button {
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
-    border: 1px solid var(--color-primary);
-    background-color: var(--color-primary);
-    color: white;
-    padding: 8px 12px;
-}
-.input-with-send button:hover {
-    background-color: var(--color-primary-h);
-    cursor: pointer;
-}
-
 
 .Tile-Dialog-Comment {
     border-top: 1px solid var(--color-subtle-border);

@@ -2,13 +2,10 @@ main {
     margin-top: 20px;
 }
 
-.main-search {
+main .Search {
     width: 94%;
     max-width: 700px;
-    padding: 8px;
-    margin: 20px 0;
-    border-radius: 8px;
-    border: 1px solid var(--color-subtle-border);
+    margin: 20px auto;
 }
 
 .main-Grid-wrapper {

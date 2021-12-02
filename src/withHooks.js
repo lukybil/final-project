@@ -3,7 +3,7 @@ import useNotificationProvider from './NotificationProvider/useNotificationProvi
 export function withHooks(Component) {
   return function WrappedComponent(props) {
     const { snackbar, addSnackbar, removeSnackbar } = useNotificationProvider();
-    return <Component {...props} snackbar={snackbar} addSnackbar={addSnackbar} />;
+    return <Component {...props} snackbar={snackbar} addSnackbar={addSnackbar}/>;
   }
 }
 

@@ -1,0 +1,31 @@
+/*.Search input[type=text] {
+
+}*/
+
+.Search {
+    position: relative;
+    margin: auto;
+}
+
+.Search.input-with-send {
+    display: block;
+}
+
+.Search .AdvancedOptions {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%);
+    background-color: white;
+    /*padding: 24px;*/
+    z-index: 3;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 0 0 16px 16px;
+    border: 1px solid var(--color-subtle-border);
+    height: initial;
+}
+
+.AdvancedOptions>.form-dialog {
+    width: 100%;
+}

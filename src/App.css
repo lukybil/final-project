@@ -5,7 +5,10 @@
 .App {
   text-align: center;
   background-color: white;
-  padding-bottom: 100px;
+}
+
+.App main {
+    padding-bottom: 100px;
 }
 
 header {

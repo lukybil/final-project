@@ -12,6 +12,16 @@ const fileToDataUri = (file) => new Promise((resolve, reject) => {
 	reader.readAsDataURL(file);
 })
 
+export function Tags(props) {
+	let tags = ["cultural", "rural", "historical", "business", "environmental", "eco-tourism"];
+	let tagPills = tags.map( (tag) => {
+		return <PillCheckbox value={tag} />
+	});
+	return (
+		<div>{tagPills}</div>
+	);
+}
+
 function PillCheckbox(props) {
 	return (	
 		<label className="PillCheckbox no-selection">
@@ -66,10 +76,6 @@ class NewExperience extends React.Component {
 	}
 
 	render() {
-		let tags = ["cultural", "rural", "historical", "business", "environmental", "eco-tourism"];
-		let tagPills = tags.map( (tag) => {
-			return <PillCheckbox value={tag} />
-		});
 		return (
 			<div className="NewExperience">
 				<form>
@@ -88,7 +94,7 @@ class NewExperience extends React.Component {
 						<textarea id="newExpTrasportation" name="transportation" placeholder="Trasnportation"></textarea>
 						<textarea id="newExpAccomodation" name="accomodation" placeholder="Accomodation"></textarea>
 						<textarea id="newExpUsefulLinks" name="usefulLinks" placeholder="Useful links"></textarea>
-						<div>{tagPills}</div>
+						<Tags />
 						<button className="button-primary" onClick={e => this.onSubmit(e)}>Add experience</button>
 					</div>
 				</form>

@@ -122,7 +122,7 @@ class Nav extends React.Component {
             </button>
           </div>
           {this.state.isUserMenuOpen ? userMenu : ""}
-          {console.log(this.state.isUserMenuOpen)}
+          {/*console.log(this.state.isUserMenuOpen)*/}
         </li>
       );
     }

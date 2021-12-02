@@ -10,6 +10,7 @@ import Dialog from '@mui/material/Dialog';
 import NewExperience from "../NewExperience/NewExperience";
 import withHooks from '../withHooks';
 import restrictAccess from '../decorators/restrictAccess';
+import Search from '../Search/Search';
 
 /*
 This is the experiences menu page, at /experiences
@@ -76,9 +77,7 @@ class Experiences extends React.Component {
 		return (
 			<main className="Experiences">
 				<h2>Experiences</h2>
-				<form>
-					<input type="text" className="main-search" placeholder="author, name, location,..."/>
-				</form>
+				<Search />
 				<div className="main-flex">
 					<div className="main-Grid-wrapper main-column-grid">
 						<Grid container spacing={2} className="main-Grid-container">

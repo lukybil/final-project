@@ -11,6 +11,7 @@ import UserProfile from './UserProfile/UserProfile';
 import Footer from './Footer/Footer';
 import NotificationInterface from './NotificationProvider/NotificationInterface';
 import NotificationProvider from './NotificationProvider/NotificationProvider';
+import SearchResults from './SearchResults/SearchResults';
 
 export function Logo(props) {
   return (
@@ -79,12 +80,13 @@ class App extends React.Component {
           <Routes >
             <Route path="/destinations" element={<span>Destinations</span>}/>
             <Route path="/experiences" element={<Experiences db={this.db}/>}/>
+            <Route path="/searchResults:" element={<SearchResults />} />
             <Route path="/userProfile/:username" element={<UserProfile db={this.db}/>}/>      
             <Route path="/" element={<Home/>} />
           </Routes >
           {pageContent}
+          <Footer />
         </div>
-        <Footer />
         <NotificationInterface />
       </NotificationProvider>
     );
