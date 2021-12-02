@@ -80,7 +80,7 @@ class App extends React.Component {
           <Routes >
             <Route path="/destinations" element={<span>Destinations</span>}/>
             <Route path="/experiences" element={<Experiences db={this.db}/>}/>
-            <Route path="/searchResults:" element={<SearchResults />} />
+            <Route path="/searchResults" element={<SearchResults />} />
             <Route path="/userProfile/:username" element={<UserProfile db={this.db}/>}/>      
             <Route path="/" element={<Home/>} />
           </Routes >

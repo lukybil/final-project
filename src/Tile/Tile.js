@@ -47,8 +47,10 @@ export class Tile extends React.Component{
 				: undefined}
 			>
 				<img src={this.props.img} alt={this.props.h1} className="Tile-img"></img>
-				<span className="Tile-h2">{this.props.h2}</span>
-				<span className="Tile-h1">{this.props.h1}</span>
+				<div className="h-wrapper">
+					<span className="Tile-h2">{this.props.h2}</span>
+					<span className="Tile-h1">{this.props.h1}</span>
+				</div>
 				{likes}
 				<Dialog
 					open={this.state.isPopupOpen}

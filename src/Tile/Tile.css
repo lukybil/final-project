@@ -52,28 +52,46 @@
 }
 
 .Tile-h2,.Tile-h1,.Tile-likes {
+    position: relative;
     display: inline-block;
     color: white;
     font-weight: 600;
-    position: absolute;
     z-index: 2;
-    left: 10px;
-    bottom: 5px;
-    font-size: xx-large;
     text-shadow:
    -1px -1px 0 #222,  
     1px -1px 0 #222,
     -1px 1px 0 #222,
      1px 1px 0 #222;
+    /*-webkit-text-stroke: 2px black;
+    text-stroke: 2px black;*/
 }
 
 .Tile-h2 {
     font-weight: 600;
-    bottom: 35px;
     font-size: larger;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+.Tile-h1 {
+    font-size: xx-large;
+    line-height: 1em;
+}
+
+.h-wrapper {
+    text-align: left;
+    position: absolute;
+    left: 10px;
+    bottom: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    z-index: 2;
+    padding: 16px 8px 4px 8px;
 }
 
 .Tile-likes {
+    position: absolute;
     left: auto;
     bottom: auto;
 	right: 10px;
