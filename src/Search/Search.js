@@ -13,16 +13,16 @@ function getInputValueByName(wrapperName, name) {
 }
 
 function AdvancedOptions(props) {
-    const {snackbar, addSnackbar} = useNotificationProvider();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [state, setState] = useState({redirect: false});
+    const {addSnackbar} = useNotificationProvider();
+    /*const [searchParams, setSearchParams] = useSearchParams();
+    const [state, setState] = useState();*/
     const navigate = useNavigate();
     useEffect(() => {
     });
 
     let handleSubmit = (e) => {
         e.preventDefault();
-        addSnackbar("success", "Searching!");
+        //addSnackbar("success", "Searching!");
         let wrapperName = ".AdvancedOptions";
         let searchObject = {};
         searchObject.name = getInputValueByName(wrapperName, "name");
@@ -35,13 +35,8 @@ function AdvancedOptions(props) {
 		});
         searchObject.tags = JSON.stringify(tags);
         //let params = serializeFormQuery(event.target);
-        setSearchParams(searchObject);
-        setState({redirect: true});
+        navigate('/searchResults?searchObject=' + JSON.stringify(searchObject));
     };
-
-    if (state.redirect === true) {
-        navigate('/searchResults?' + searchParams);
-    }
     
     return (
         <div className="AdvancedOptions">

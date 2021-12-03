@@ -54,7 +54,6 @@ class App extends React.Component {
     super(props);
     this.db = new DB(this.setCurrentUser.bind(this))
     this.state = {user: this.db.getCurrentUser(), isDatabaseLoaded: false};
-    console.log(this.props);
   }
 
   setCurrentUser(newUser) {
@@ -80,7 +79,7 @@ class App extends React.Component {
           <Routes >
             <Route path="/destinations" element={<span>Destinations</span>}/>
             <Route path="/experiences" element={<Experiences db={this.db}/>}/>
-            <Route path="/searchResults" element={<SearchResults />} />
+            <Route path="/searchResults" element={<SearchResults db={this.db}/>} />
             <Route path="/userProfile/:username" element={<UserProfile db={this.db}/>}/>      
             <Route path="/" element={<Home/>} />
           </Routes >

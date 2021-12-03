@@ -208,6 +208,52 @@ class DB {
         return exp;
     }
 
+    getFilteredExps(filter) {
+        if (filter === null) {
+            return;
+        }
+        let resultExps = [];
+        if (filter.keyword !== undefined && filter.keyword !== null) {
+            let keyword = filter.keyword.toLowerCase();
+            this.experiences.forEach((exp) => {
+                for (const key of Object.keys(exp)) {
+                    const val = exp[key];
+                    if (typeof val === 'string' || val instanceof String) {
+                        if (val.toLowerCase().includes(keyword)) {
+                            exp.id !== -1 && resultExps.push(exp);
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+        else {
+            this.experiences.forEach((exp) => {
+                if ((exp.name.toLowerCase().includes(filter.name.toLowerCase()) && filter.name !== "") ||
+                    (exp.username.toLowerCase().includes(filter.author.toLowerCase()) && filter.author !== "") ||
+                    (exp.city.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== "") ||
+                    (exp.country.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== "") ) 
+                {
+                    exp.id !== -1 && resultExps.push(exp);
+                }
+                else {
+                    loop1:
+                    for (let i = 0; i < filter.tags.length; i++) {
+                        const tag = filter.tags[i];
+                        for (let j = 0; j < exp.tags.length; j++) {
+                            const expTag = exp.tags[j];
+                            if (tag === expTag) {
+                                exp.id !== -1 && resultExps.push(exp);
+                                break loop1;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        return resultExps;
+    }
+
     addExp(exp) {
         checkExpAndFill(exp);
         console.log(exp);
