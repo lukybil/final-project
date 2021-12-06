@@ -25,19 +25,15 @@ const deletedExp = {
     comments: []
 };
 
-class User {
-    constructor(data) {
-        this.data = data;
-    }
-}
-
-User.prototype.toString = () => {
-    
-}
-
+//Main fake database class used for any data related operarions
 class DB {
+    /**possible defaultAvatarColors when user creates a new account*/
     colors = ["abdee6", "cbaacb", "ffffb5", "ffccb60", "f3b0c3", "fee1e8", "fed7c3", "ecd5e3", "d4f0f0", "cce2cb", "b6cfb6", "97c1a9", "a2e1db"];
 
+    /** possible tags for experiences */
+    static tags = ["cultural", "rural", "historical", "business", "environmental", "eco-tourism"];
+
+    //all users stored in a map
     usersMap = new Map([
         ["kingkong", {username: "kingkong", email: "kingkong@gmail.comm", password: "p", defaultAvatarColor: this.getRandomColor(), profileImg: "", numberLikes: 0}],
         ["godzilla", {username: "godzilla", email: "gzilla@gmail.comm", password: "p", defaultAvatarColor: this.getRandomColor(), profileImg: "", numberLikes: 0}],
@@ -45,12 +41,16 @@ class DB {
         ["boris", {username: "boris", email: "boris.sluklov@gmail.comm", password: "p", defaultAvatarColor: this.getRandomColor(), profileImg: "", numberLikes: 0}]
     ]);
 
+    //top users based on aggregate amount of likes among their experiecnes
     topUsersList = [];
 
+    //currently logged in user
     currentUser = guestUser;
 
+    //next experience it to be added in the experiences array
     nextExpId = 2;
 
+    //storage array for experiences, ids match the indexes, so the search speed i O(1)
     experiences = [
         {
             id: 0,
@@ -94,10 +94,24 @@ class DB {
 
     ]
 
+    //collections storage
+    collections = [
+        {
+            id: 0,
+            name: "",
+            img: "",
+            username: "",
+            description: "",
+            experiences: [this.experiences[0]]
+        }
+    ]
+
+    //appSetCurrentUser is a function in the App Component, calling this function notifies the whole app of user change
     constructor(appSetCurrentUser) {
         this.appSetCurrentUser = appSetCurrentUser;
     }
 
+    /**sets timers for recalculating users likes amount and updating the top users table*/
     startup() {
         this.updateUserLikesAmount();
         this.updateTopUsersList();
@@ -109,6 +123,7 @@ class DB {
         this.appSetCurrentUser = appSetCurrentUser;
     }
 
+    /**saves all data to local storage*/
     saveIntoLocalStorage() {
         this.experiences.forEach((exp) => {
             exp.likes = Array.from(exp.likes);
@@ -120,6 +135,7 @@ class DB {
         alert("Database saved!");
     }
 
+    /**loads from local storage*/
     loadFromLocalStorage() {
         let protoUsersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
         let protoExperiences = JSON.parse(localStorage.getItem("experiences"));
@@ -152,6 +168,7 @@ class DB {
         this.startup(); //IMPORTANT
     }
 
+    /**updates top users list, triggered by the timer in function startup()*/
     updateTopUsersList() {
         this.topUsersList = [];
         this.usersMap.forEach( (user) => {
@@ -161,6 +178,7 @@ class DB {
         this.topUsersList = this.topUsersList.slice(0, 10);
     }
 
+    /**updates users likes amount, triggered by the timer in function startup()*/
     updateUserLikesAmount() {
         let newUsersMap = new Map(this.usersMap);
         newUsersMap.forEach( (user) => {
@@ -182,6 +200,7 @@ class DB {
         return this.topUsersList;
     }
 
+    /**get a by amount specified number of experiences with the most likes */
     getTopExp(amount) {
         let topExp = [...this.experiences];
         for (let i = 0; i < topExp.length; i++) {
@@ -208,12 +227,14 @@ class DB {
         return exp;
     }
 
+    /**used by search, returns experiences array based on filter parameters*/
     getFilteredExps(filter) {
         if (filter === null) {
             return;
         }
         let resultExps = [];
         if (filter.keyword !== undefined && filter.keyword !== null) {
+            //a simple filter, checks every string attribute of each experience for a match of the keyword
             let keyword = filter.keyword.toLowerCase();
             this.experiences.forEach((exp) => {
                 for (const key of Object.keys(exp)) {
@@ -228,27 +249,36 @@ class DB {
             });
         }
         else {
+            //the advanced filter, the resulting exps match all the set filter attributes
+            let matchCounter = 0;
+            let fieldsSet = 0;
+            filter.name !== "" && fieldsSet++;
+            filter.author !== "" && fieldsSet++;
+            filter.location !== "" && fieldsSet++;
+            filter.tags.length !== 0 && fieldsSet++;
+
             this.experiences.forEach((exp) => {
-                if ((exp.name.toLowerCase().includes(filter.name.toLowerCase()) && filter.name !== "") ||
-                    (exp.username.toLowerCase().includes(filter.author.toLowerCase()) && filter.author !== "") ||
-                    (exp.city.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== "") ||
-                    (exp.country.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== "") ) 
-                {
-                    exp.id !== -1 && resultExps.push(exp);
-                }
-                else {
-                    loop1:
-                    for (let i = 0; i < filter.tags.length; i++) {
-                        const tag = filter.tags[i];
-                        for (let j = 0; j < exp.tags.length; j++) {
-                            const expTag = exp.tags[j];
-                            if (tag === expTag) {
-                                exp.id !== -1 && resultExps.push(exp);
-                                break loop1;
-                            }
+                matchCounter = 0;
+                if (exp.name.toLowerCase().includes(filter.name.toLowerCase()) && filter.name !== "")
+                    matchCounter++;
+                if (exp.username.toLowerCase().includes(filter.author.toLowerCase()) && filter.author !== "")
+                    matchCounter++;
+                if ((exp.city.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== "") || 
+                    (exp.country.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== ""))
+                    matchCounter++;
+                //check for tags match
+                loop1:
+                for (let i = 0; i < filter.tags.length; i++) {
+                    const tag = filter.tags[i];
+                    for (let j = 0; j < exp.tags.length; j++) {
+                        const expTag = exp.tags[j];
+                        if (tag === expTag) {
+                            matchCounter++;
+                            break loop1;
                         }
                     }
                 }
+                exp.id !== -1 && matchCounter === fieldsSet && resultExps.push(exp);
             });
         }
         return resultExps;
@@ -278,8 +308,10 @@ class DB {
         console.log(exp.likes);
     }
 
+    /**signs up a new user*/
     signupUser(user) {
         let indexes = ["username", "email", "password", "confirmPassword"];
+        //checks for user object missing data, array function some returns true and breaks only if true is returned inside the function
         if (indexes.some( (i) => { 
             if (user[i]===undefined || user[i] === "") 
                 return true; 
@@ -304,6 +336,7 @@ class DB {
         }
         user.numberLikes = 0;
         user.profileImg = "";
+        user.defaultAvatarColor = this.getRandomColor();
         this.usersMap.set(user.username, user);
         return "";
     }
@@ -338,6 +371,7 @@ class DB {
         return this.currentUser;
     }
 
+    /** gets a random color from the colors array */
     getRandomColor() {
         let index = Math.floor(Math.random() * this.colors.length);
         return "#"+this.colors[index];
@@ -345,7 +379,7 @@ class DB {
 
     updateUser(user) {
         this.usersMap.set(user.username, user);
-        if (this.getCurrentUser().username = user.username);
+        if (this.getCurrentUser().username === user.username);
             this.setCurrentUser(user);
     }
 
@@ -357,6 +391,7 @@ class DB {
             }
         });
         userExps.sort((a, b) => b.likes.size - a.likes.size);
+        userExps = userExps.slice(0, amount);
         return userExps;
     }
 
@@ -370,6 +405,72 @@ class DB {
         let exp = this.getExpById(expId);
         exp.comments.push({username: this.getCurrentUser().username, date: new Date(), content: content});
     }
+
+    getCollection(collectionId) {
+        return this.collections[collectionId].id === collectionId ? this.collections[collectionId] : null;
+    }
+
+    addCollection(collection) {
+        if (collection.username !== this.getCurrentUser().username)
+            return;
+        let collectionTemplate = {
+            name: "",
+            img: "",
+            username: "",
+            description: "",
+            experiences: []
+        };
+        collectionTemplate = {...collection};
+        collection.id = this.collections.length;
+        this.collections.push(collectionTemplate);
+    }
+
+    addToCollection(expId, collectionId) {
+        let exp = this.getExpById(expId);
+        let collection = this.collections[collectionId];
+        if (exp.username === collectionId && exp.username === this.getCurrentUser().username)
+            collection.experiences.push(exp);
+    }
+
+    getCollectionsByUser(username, amount) {
+        let userCollections = [];
+        this.collections.forEach( (exp) => {
+            if (exp.username === username) {
+                userCollections.push(exp);
+            }
+        });
+        //userCollections.sort((a, b) => b.likes.size - a.likes.size);
+        if (amount !== -1)
+            userCollections = userCollections.slice(0, amount);
+        return userCollections;
+    }
 }
 
 export default DB;
+
+/*
+
+            this.experiences.forEach((exp) => {
+                if ((exp.name.toLowerCase().includes(filter.name.toLowerCase()) && filter.name !== "") ||
+                    (exp.username.toLowerCase().includes(filter.author.toLowerCase()) && filter.author !== "") ||
+                    (exp.city.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== "") ||
+                    (exp.country.toLowerCase().includes(filter.location.toLowerCase()) && filter.location !== "") ) 
+                {
+                    exp.id !== -1 && resultExps.push(exp);
+                }
+                else {
+                    loop1:
+                    for (let i = 0; i < filter.tags.length; i++) {
+                        const tag = filter.tags[i];
+                        for (let j = 0; j < exp.tags.length; j++) {
+                            const expTag = exp.tags[j];
+                            if (tag === expTag) {
+                                exp.id !== -1 && resultExps.push(exp);
+                                break loop1;
+                            }
+                        }
+                    }
+                }
+            });
+
+*/

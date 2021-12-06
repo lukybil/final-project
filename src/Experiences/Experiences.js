@@ -6,11 +6,10 @@ import '../common.css';
 import "../Home/Home.css";
 import "./Experiences.css";
 import {AiFillHeart} from 'react-icons/all'
-import Dialog from '@mui/material/Dialog';
-import NewExperience from "../NewExperience/NewExperience";
 import withHooks from '../withHooks';
-import restrictAccess from '../decorators/restrictAccess';
 import Search from '../Search/Search';
+import DialogButton from "../DialogButton/DialogButton";
+import NewExperience from '../NewExperience/NewExperience';
 
 /*
 This is the experiences menu page, at /experiences
@@ -97,29 +96,13 @@ class Experiences extends React.Component {
 					</div>
 					<div className="main-column-users">
 						<aside>
-							<button
-								className="button-primary"
-								onClick={(e) => {
-									restrictAccess(this.db, this.props.addSnackbar, (e) => this.setState({isNewExpOpen: true}));
-								}}
-							>
-								Add experience
-							</button>
+							<DialogButton db={this.db} text="Add experience">
+								<NewExperience db={this.db}/>
+							</DialogButton>
 							<UserRanking topUsers={this.db.getTopUsers(10)}/>
 						</aside>
 					</div>
 				</div>
-				<Dialog //dialog object for showing the NewExperience form on add experience button click
-					open={this.state.isNewExpOpen}
-					onClose={this.handlePopupClose.bind(this)}
-					scroll={'paper'}
-					aria-labelledby="scroll-dialog-title"
-					aria-describedby="scroll-dialog-description"
-					maxWidth="lg"
-					className="Tile-dialog"
-				>
-					<NewExperience db={this.db}/>
-				</Dialog>
 			</main>
 		);
 	}

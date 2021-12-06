@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ExpTile, {checkExpAndFill} from "../Tile/Tile";
 import { Grid } from "@mui/material";
+import Search from '../Search/Search';
 
 export default function SearchResults(props) {
   const [state, setState] = useState({});
@@ -21,6 +22,7 @@ export default function SearchResults(props) {
     resultExps = db.getFilteredExps(searchObject);
   }
 
+  //this part sets a random width of the resulting experiences in a grid and creates the result grid itself
   let first = 0;
   let counter = -1;
   let md;
@@ -41,8 +43,9 @@ export default function SearchResults(props) {
   
   return (
     <main className="SearchResults">
+      <h2>Search results</h2>
+      <Search />
       <div className="main-flex">
-        <span>Search results</span><br/>
         <Grid container spacing={2} className="main-Grid-container">
           {gridTiles}
         </Grid>

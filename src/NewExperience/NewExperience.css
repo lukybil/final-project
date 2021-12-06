@@ -28,6 +28,30 @@
     resize: vertical;
 }
 
+.newExpBudget span {
+    color: #777;
+    display: block;
+}
+
+.NewExperience span>img {
+    width: 100%;
+}
+
+.newExpBudget input, .newExpBudget textarea {
+    padding: 8px;
+    display: inline-block;
+    margin: 4px 0;
+    max-width: 100%;
+    font-size: medium;
+    border-radius: 4px;
+    border: 1px solid var(--color-subtle-border);
+    width: 100%;
+}
+
+.newExpBudget input:nth-child(2),.newExpBudget input:nth-child(3) {
+    width: 8ch;
+}
+
 .PillCheckbox,.TagPill {
     display: inline-block;
     margin-right: 8px;

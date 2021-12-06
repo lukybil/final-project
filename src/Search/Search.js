@@ -12,17 +12,34 @@ function getInputValueByName(wrapperName, name) {
     return document.querySelector(wrapperName + " input[name=" + name + "]").value;
 }
 
+function setInputValueByName(wrapperName, name, value) {
+    document.querySelector(wrapperName + " input[name=" + name + "]").value = value;
+}
+
 function AdvancedOptions(props) {
     const {addSnackbar} = useNotificationProvider();
-    /*const [searchParams, setSearchParams] = useSearchParams();
-    const [state, setState] = useState();*/
+    const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     useEffect(() => {
-    });
+        let filter = {};
+        let searchObject;
+        
+        if (searchParams.get("searchObject") !== null) {
+            searchObject = JSON.parse(searchParams.get("searchObject"));
+            searchObject.tags = JSON.parse(searchObject.tags);
+            filter = searchObject;
+        }
+        filter.tags?.forEach( (tag) => {
+            document.querySelector(`.AdvancedOptions .PillCeckbox input[name=${tag}]`).checked = true;
+        });
+        setInputValueByName(".AdvancedOptions", "name", filter.name || "");
+        setInputValueByName(".AdvancedOptions", "location", filter.location || "");
+        setInputValueByName(".AdvancedOptions", "author", filter.author || "");
+    }, []);
 
+    /** create a filter object on submit and send this via the URL to the searchResults page */
     let handleSubmit = (e) => {
         e.preventDefault();
-        //addSnackbar("success", "Searching!");
         let wrapperName = ".AdvancedOptions";
         let searchObject = {};
         searchObject.name = getInputValueByName(wrapperName, "name");
@@ -34,7 +51,6 @@ function AdvancedOptions(props) {
 			tags.push(input.value);
 		});
         searchObject.tags = JSON.stringify(tags);
-        //let params = serializeFormQuery(event.target);
         navigate('/searchResults?searchObject=' + JSON.stringify(searchObject));
     };
     
@@ -45,7 +61,7 @@ function AdvancedOptions(props) {
                     <input type="text" name="name" placeholder="Name"/>
                     <input type="text" name="location" placeholder="Location"/>
                     <input type="text" name="author" placeholder="Author"/>
-                    <Tags />
+                    <Tags/>
                     <button type="submit" className="button-submit">Search</button>
                 </div>
             </form>
@@ -55,21 +71,26 @@ function AdvancedOptions(props) {
 
 export default function Search(props) {
     let [advanced, setAdvanced] = useState(false);
+    let [searchParams] = useSearchParams();
     let navigate = useNavigate();
     let handleChange = (e) => {
 
     };
 
+    useEffect(() => {
+        let filter = {};
+        let keyword;
+        if ((keyword = searchParams.get("keyword")) !== null)
+            filter = {keyword: keyword};
+        setInputValueByName(".Search", "keyword", filter.keyword || "");
+    }, []);
+
+    /** sets the keyword GET parameter and navigates to sthe searchResults page */
     let handleSubmit = (e) => {
         e.preventDefault();
         let keyword = e.target.querySelector("input[name=keyword]").value;
         navigate("/searchResults?keyword=" + keyword);
     };
-
-    /*let advOptions = "";
-    if (advanced) {
-        advOptions = <AdvancedOptions />;
-    }*/
 
     return (
         <div className="Search input-with-send">

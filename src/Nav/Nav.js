@@ -31,7 +31,7 @@ function SignInButton(props) {
 }
 
 
-
+/** top navigation bar */
 class Nav extends React.Component {
   constructor(props) {
     super(props);
@@ -134,7 +134,7 @@ class Nav extends React.Component {
         </Routes>
         <ul>
           {this.generateMenuButton("Home", <AiFillHome/>)}
-          {this.generateMenuButton("Destinations",  <FaPlane/>)}
+          {/*this.generateMenuButton("Destinations",  <FaPlane/>)*/}
           {this.generateMenuButton("Experiences", <FaMapMarkedAlt/>)}
           {!loggedIn ? this.generateSignInButton() : ""}
           {userPanel}

@@ -140,3 +140,9 @@
     font-weight: 600;
     padding-right: 8px;
 }
+
+.Tile-dialog .delete-button {
+    background-color: inherit;
+    border: none;
+    font-size: larger;
+}

@@ -8,6 +8,10 @@ import { useParams } from 'react-router';
 import { UserAvatar } from '../User/User';
 import { Tabs, Tab } from '@mui/material';
 import withHooks from '../withHooks';
+import DialogButton from '../DialogButton/DialogButton';
+import NewExperience from '../NewExperience/NewExperience';
+import NewCollection from '../NewCollection/NewCollection';
+import { CollectionTile } from '../Tile/Tile';
 //import {withRouter} from '../App';
 
 export const withRouter = WrappedComponent => props => {
@@ -32,30 +36,58 @@ class UserProfile extends React.Component {
 
   render() {
     let params = this.props.params;
-    let topUserExp = this.props.db.getTopExpByUser(params.username, 4);
     let viewedUser = this.props.db.getUser(params.username);
     let content;
     if (this.state.tabValue === "experiences") {
+      let topUserExp = this.props.db.getTopExpByUser(params.username, 4);
       content = (
-        <Grid container spacing={2} className="main-Grid-container">
-          <Grid item xs={12} md={7}>
-            <ExpTile exp={checkExpAndFill(topUserExp.length >= 1 ? topUserExp[0] : {})} db={this.props.db} />
+        <div>
+          {viewedUser.username === this.props.db.getCurrentUser().username && 
+            <DialogButton db={this.props.db} text="Add experience">
+              <NewExperience db={this.props.db}/>
+            </DialogButton>
+          }
+          <Grid container spacing={2} className="main-Grid-container">
+            <Grid item xs={12} md={7}>
+              <ExpTile exp={checkExpAndFill(topUserExp.length >= 1 ? topUserExp[0] : {})} db={this.props.db} />
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <ExpTile exp={checkExpAndFill(topUserExp.length >= 2 ? topUserExp[1] : {})} db={this.props.db} />
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <ExpTile exp={checkExpAndFill(topUserExp.length >= 3 ? topUserExp[2] : {})} db={this.props.db} />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <ExpTile exp={checkExpAndFill(topUserExp.length >= 4 ? topUserExp[3] : {})} db={this.props.db} />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={5}>
-            <ExpTile exp={checkExpAndFill(topUserExp.length >= 2 ? topUserExp[1] : {})} db={this.props.db} />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <ExpTile exp={checkExpAndFill(topUserExp.length >= 3 ? topUserExp[2] : {})} db={this.props.db} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <ExpTile exp={checkExpAndFill(topUserExp.length >= 4 ? topUserExp[3] : {})} db={this.props.db} />
-          </Grid>
-        </Grid>
+        </div>
       );
     }
     else {
+      let userCollections = this.props.db.getCollectionsByUser(params.username, -1);
       content = (
-        <span>Collections</span>
+        <div>
+          {viewedUser.username === this.props.db.getCurrentUser().username && 
+            <DialogButton db={this.props.db} text="Add collection">
+              <NewCollection db={this.props.db}/>
+            </DialogButton>
+          }
+          <Grid container spacing={2} className="main-Grid-container">
+            <Grid item xs={12} md={7}>
+              <CollectionTile collection={userCollections.length > 0 && userCollections[0]} db={this.props.db} />
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <CollectionTile collection={userCollections.length > 1 && userCollections[1]} db={this.props.db} />
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <CollectionTile collection={userCollections.length > 2 && userCollections[2]} db={this.props.db} />
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <CollectionTile collection={userCollections.length > 3 && userCollections[3]} db={this.props.db} />
+            </Grid>
+          </Grid>
+        </div>
       );
     }
     return (

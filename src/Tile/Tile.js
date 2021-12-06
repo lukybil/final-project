@@ -9,6 +9,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
 import withHooks from "../withHooks";
 
+/** class for the basic tile, is used mostly for experiences but also for collections, with two headings and a possible likes amount */
 export class Tile extends React.Component{
 	constructor(props) {
 		super(props);
@@ -39,10 +40,10 @@ export class Tile extends React.Component{
 		return (
 			<div 
 				className="Tile" 
-				onClick={this.props.type === "exp" ? 
+				onClick={this.props.type === "withPopup" ? 
 				((e) => {
-						if (!this.state.isPopupOpen)
-								this.setState({isPopupOpen: true});
+					if (!this.state.isPopupOpen && this.props.exp.id !== "")
+						this.setState({isPopupOpen: true});
 				}) 
 				: undefined}
 			>
@@ -68,12 +69,49 @@ export class Tile extends React.Component{
 	}
 }
 
+export function CollectionTile(props) {
+	const collection = props.collection;
+	const generatePopup = () => {
+		return (
+			<div className="Tile-Dialog-flex">
+				<div style={{position: "relative"}}>
+					<img className="main-img" src={collection.img} alt={collection.h1}></img>
+				</div>
+				<div className="wrapper">
+					<h2>{collection.name}</h2>
+					<User user={props.db.getUser(collection.username)}/>
+					{/*deleteButton*/}
+					<table>
+						<tbody>
+							<tr>
+								<td>Description: </td>
+								<td>{collection.description}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		);
+	}
+	return (
+		<Tile 
+			type="withPopup" 
+			img={collection.img}
+			h1={collection.name} 
+			h2={collection.username} 
+			popupElement={generatePopup()}
+			exp={collection}
+		/>
+	);
+}
+
 function TagPill(props) {
 	return (
 		<span className="TagPill">{props.value}</span>
 	);
 }
 
+//checks the experience object and fills any missing attributes, used before passing it to the ExpTile or before passing it to the addExp DB function
 export function checkExpAndFill(exp) {
 	if (typeof exp !== 'object' ||
 	Array.isArray(exp) ||
@@ -102,6 +140,7 @@ export function checkExpAndFill(exp) {
 	return exp;
 }
 
+//generic input with a send/confirm button, used for comments and search
 export function InputWithSend(props) {
 	return (
 		<span className="input-with-send">
@@ -120,13 +159,12 @@ export function InputWithSend(props) {
 	);
 }
 
+/** adds a popup dialog to the Tile object, containing all the experience information */
 export class ExpTile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {isHeartPresent: false};
 	}
-
-	
 
 	generateComment(props) {
 		return (
@@ -138,6 +176,7 @@ export class ExpTile extends React.Component {
 		);
 	}
 
+	/** displays a heart, used on doubleClick on the experience image */
 	showHeart() {
 		this.setState({isHeartPresent: true});
 		setTimeout((e) => this.setState({isHeartPresent: false}) , 3000);
@@ -162,14 +201,12 @@ export class ExpTile extends React.Component {
 		this.props.db.deleteExp(this.props.exp.id);
 	}
 
+	/** the function for generating the experience popup used for displaying all information about an experience */
 	generatePopup() {
 		const exp = this.props.exp;
 		let usefulLinks = exp.usefulLinks.map( (link) => {
 			return <span><a href={link}>{link}</a><br></br></span>
 		});
-		/*let comments = exp.comments.map( (comment) => {
-			return this.generateComment(comment);
-		});*/
 		let comments = [];
 		for (let i = exp.comments.length - 1; i >= 0; i--) {
 			comments.push(this.generateComment(exp.comments[i]));
@@ -181,7 +218,9 @@ export class ExpTile extends React.Component {
 		if (this.state.isHeartPresent)
 			likeHeart = <AiFillHeart className="big-heart"/>
 		let attrNames = ["country", "city", "description", "documentation", "budget", "transportation", "accomodation", "usefulLinks", "tags"];
+		//infoTable contains all information about the experience
 		let infoTableRows = attrNames.map( (attr) => {
+			//makes the first letter capital
 			let label = attr.charAt(0).toUpperCase() + attr.slice(1);
 			let content = exp[attr];
 			switch (attr) {
@@ -205,6 +244,10 @@ export class ExpTile extends React.Component {
 				</tr>
 			);
 		});
+		let deleteButton = "";
+		if (this.props.db.getCurrentUser().username === exp.username) {
+			deleteButton = <button className="delete-button" onClick={this.deleteExp.bind(this)}><BsFillTrashFill /></button>
+		}
 		return (
 			<div className="Tile-Dialog-flex">
 				<div className="Tile-Dialog-column-info">
@@ -216,7 +259,7 @@ export class ExpTile extends React.Component {
 						<h2>{exp.name}</h2>
 						<User user={this.props.db.getUser(exp.username)}/>
 						<p><AiFillHeart/> {exp.likes.size}</p>
-						<button onClick={this.deleteExp.bind(this)}><BsFillTrashFill /></button>
+						{deleteButton}
 						<table>
 							<tbody>
 								{infoTableRows}
@@ -241,12 +284,13 @@ export class ExpTile extends React.Component {
 		const exp = this.props.exp;
 		return (
 			<Tile 
-				type="exp" 
+				type="withPopup" 
 				img={exp.img} 
 				h1={exp.name} 
 				h2={exp.username} 
 				likes={exp.likes.size}
 				popupElement={this.generatePopup()}
+				exp={exp}
 			/>
 		);
 	}

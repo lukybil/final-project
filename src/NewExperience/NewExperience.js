@@ -3,7 +3,9 @@ import '../common.css';
 import './NewExperience.css';
 import withHooks from "../withHooks";
 import restrictAccess from "../decorators/restrictAccess";
+import DB from '../DB';
 
+/** unused function, can be used to save images in Base64 format but is very inefficient and because localStorage is limited in capacity to only 5MB, only around 3 high-quality images could be stored, now using links to online hosted images instead */
 const fileToDataUri = (file) => new Promise((resolve, reject) => {
 	const reader = new FileReader();
 	reader.onload = (event) => {
@@ -13,7 +15,7 @@ const fileToDataUri = (file) => new Promise((resolve, reject) => {
 })
 
 export function Tags(props) {
-	let tags = ["cultural", "rural", "historical", "business", "environmental", "eco-tourism"];
+	let tags = DB.tags;
 	let tagPills = tags.map( (tag) => {
 		return <PillCheckbox value={tag} />
 	});
@@ -60,7 +62,7 @@ class NewExperience extends React.Component {
 			this.props.addSnackbar("info", "You have to sign in to add experiences.")
 			return;
 		}
-		let names = ["name", "img", "country", "city", "description", "documentation", "budget", "transportation", "accomodation"];
+		let names = ["name", "img", "country", "city", "description", "documentation", "transportation", "accomodation"];
 		let exp = {};
 		names.forEach( (n) => {
 			exp[n] = document.querySelector("input[name=" + n + "],textarea[name=" + n + "]")?.value;
@@ -71,6 +73,12 @@ class NewExperience extends React.Component {
 		document.querySelectorAll(".PillCheckbox input:checked").forEach( (input) => {
 			exp.tags.push(input.value);
 		});
+
+		exp.budget = {};
+		exp.budget.from = document.querySelector("input[name=budgetFrom]")?.value;
+		exp.budget.to = document.querySelector("input[name=budgetTo]")?.value;
+		exp.budget.notes = document.querySelector("input[name=budgetNotes]")?.value;
+
 		this.db.addExp(exp);
 		this.props.addSnackbar("success", "Experience added successfully");
 	}
@@ -90,11 +98,18 @@ class NewExperience extends React.Component {
 						<input type="text" id="newExpCity" name="city" placeholder="City"></input>
 						<textarea type="text" id="newExpDescription" name="description" placeholder="Description"></textarea>
 						<textarea id="newExpDocumentation" name="documentation" placeholder="Documentation"></textarea>
-						<input type="text" id="newExpBudget" name="budget" placeholder="Budget"></input>
+
+						<div className="newExpBudget">
+							<span>Budget</span>
+							<input type="number" id="newExpBudgetFrom" name="budgetFrom" placeholder="From"></input>
+							<input type="number" id="newExpBudgetTo" name="budgetTo" placeholder="To"></input>
+							<textarea type="text" id="newExpBudgetNotes" name="budgetNotes" placeholder="Notes"></textarea>
+						</div>
+
 						<textarea id="newExpTrasportation" name="transportation" placeholder="Trasnportation"></textarea>
 						<textarea id="newExpAccomodation" name="accomodation" placeholder="Accomodation"></textarea>
 						<textarea id="newExpUsefulLinks" name="usefulLinks" placeholder="Useful links"></textarea>
-						<Tags />
+						<Tags/>
 						<button className="button-primary" onClick={e => this.onSubmit(e)}>Add experience</button>
 					</div>
 				</form>
