@@ -103,9 +103,9 @@ class UserMenu extends React.Component {
                 <div className="flex">
                   <input name="username" placeholder="Username" value={user.username} disabled/>
                   <input name="email" placeholder="Email" value={user.email} disabled/>
-                  <input name="currentPassword" placeholder="Current password" />
-                  <input name="password" placeholder="Password" />
-                  <input name="confirmPassword" placeholder="Confirm password" />
+                  <input type="password" name="currentPassword" placeholder="Current password" />
+                  <input type="password" name="password" placeholder="Password" />
+                  <input type="password" name="confirmPassword" placeholder="Confirm password" />
                   <div>
                     <span>Avatar color: </span>
                     <label>

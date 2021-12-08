@@ -8,73 +8,134 @@ import User from "../User/User";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IoSend } from "react-icons/io5";
 import withHooks from "../withHooks";
+import { Grid, useMediaQuery } from "@mui/material";
+import { useTheme } from '@mui/material/styles';
+import { useState } from "react";
+import useNotificationProvider from "../NotificationProvider/useNotificationProvider";
 
 /** class for the basic tile, is used mostly for experiences but also for collections, with two headings and a possible likes amount */
-export class Tile extends React.Component{
-	constructor(props) {
-		super(props);
-		this.state = {isPopupOpen: false};
+export function Tile(props){
+	const [state, setState] = useState({isPopupOpen: false});
+	const theme = useTheme();
+	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+	const handlePopupClose = () => {
+		setState({isPopupOpen: false});
 	}
 
-	handlePopupClose() {
-		this.setState({isPopupOpen: false});
-	}
-
-	generatePopup() {
+	const generatePopup = () => {
 		return (
 			<div>
-				<img src={this.props.img} alt={this.props.h1}></img>
-				<h2>{this.props.h1}</h2>
-				<div>{this.props.likes}</div>
+				<img src={props.img} alt={props.h1}></img>
+				<h2>{props.h1}</h2>
+				<div>{props.likes}</div>
 			</div>
 		);
 	}
 
-	render() {
+	const render = () => {
 		let likes;
-		if (this.props.likes !== undefined) {
+		if (props.likes !== undefined) {
 			likes = (
-				<span className="Tile-likes"><AiFillHeart/>{this.props.likes}</span>
+				<span className="Tile-likes"><AiFillHeart/>{props.likes}</span>
 			);
 		}
 		return (
 			<div 
 				className="Tile" 
-				onClick={this.props.type === "withPopup" ? 
+				onClick={props.type === "withPopup" ? 
 				((e) => {
-					if (!this.state.isPopupOpen && this.props.exp.id !== "")
-						this.setState({isPopupOpen: true});
+					if (!state.isPopupOpen && props.exp.id !== "")
+						setState({isPopupOpen: true});
 				}) 
 				: undefined}
 			>
-				<img src={this.props.img} alt={this.props.h1} className="Tile-img"></img>
+				<img src={props.img} alt={props.h1} className="Tile-img"></img>
 				<div className="h-wrapper">
-					<span className="Tile-h2">{this.props.h2}</span>
-					<span className="Tile-h1">{this.props.h1}</span>
+					<span className="Tile-h2">{props.h2}</span>
+					<span className="Tile-h1">{props.h1}</span>
 				</div>
 				{likes}
 				<Dialog
-					open={this.state.isPopupOpen}
-					onClose={this.handlePopupClose.bind(this)}
+					fullScreen={fullScreen}
+					open={state.isPopupOpen}
+					onClose={handlePopupClose}
 					scroll={'paper'}
 					aria-labelledby="scroll-dialog-title"
 					aria-describedby="scroll-dialog-description"
-					maxWidth="lg"
+					maxWidth={props.maxWidth || "lg"}
 					className="Tile-dialog"
 				>
-					{this.props.popupElement !== undefined ? this.props.popupElement : this.generatePopup()}
+					<div>
+						<CloseButton handlePopupClose={handlePopupClose} />
+						{props.popupElement !== undefined ? props.popupElement : generatePopup()}
+					</div>
 				</Dialog>
 			</div>
 		);
 	}
+
+	return render();
+}
+
+function CloseButton(props) {
+	return (
+		<button className="CloseButton" onClick={props.handlePopupClose}>x</button>
+	);
 }
 
 export function CollectionTile(props) {
-	const collection = props.collection;
+	const [state, setState] = useState({});
+	const {addSnackbar} = useNotificationProvider();
+	let collection = {
+		id: -1,
+		name: "",
+		img: "",
+		username: "",
+		description: "",
+		experiences: []
+	};
+	collection = {...props.collection};
+
+	const generateGrid = () => {
+		let expGrid = [];
+		expGrid = collection?.experiences?.map( (exp) => {
+			return (
+				<Grid item xs={12} md={6}>
+					<ExpTile exp={checkExpAndFill(exp)} db={props.db} />
+				</Grid>
+			);
+		});
+		return expGrid;
+	}
+
+	const handleAddExperience = () => {
+		const expId = parseInt(document.querySelector("select[name=select-experiences]").value);
+		console.log(collection.id);
+		props.db.addToCollection(expId, collection.id);
+		setState({changeState: true});
+		addSnackbar("success", "Experience successfully added to the collection!");
+	}
+
 	const generatePopup = () => {
+		let selectOptions = props.db.getTopExpByUser(collection.username, -1)
+		.filter((exp) => exp.id !== -1)
+		.map( (exp) => {
+			return <option value={exp.id}>{exp.name}</option>
+		});
+
+		let addToColletion = (
+			<div className="addExpToCollection-wrapper">
+				<select name="select-experiences" className="select-experiences">
+					{selectOptions}
+				</select>
+				<button className="button-primary" onClick={(e) => handleAddExperience()} >Add experience</button>
+			</div>
+		);
+
 		return (
-			<div className="Tile-Dialog-flex">
-				<div style={{position: "relative"}}>
+			<div className="Tile-Dialog-flex CollectionTile">
+				<div className="img-wrapper" style={{position: "relative"}}>
 					<img className="main-img" src={collection.img} alt={collection.h1}></img>
 				</div>
 				<div className="wrapper">
@@ -89,18 +150,23 @@ export function CollectionTile(props) {
 							</tr>
 						</tbody>
 					</table>
+					{collection.username === props.db.getCurrentUser().username && addToColletion}
+					<Grid container spacing={2} className="main-Grid-container">
+						{collection !== null && generateGrid()}
+					</Grid>
 				</div>
 			</div>
 		);
 	}
 	return (
 		<Tile 
-			type="withPopup" 
+			type={(collection.id !== -1 && collection.id !== undefined) && "withPopup"}
 			img={collection.img}
 			h1={collection.name} 
 			h2={collection.username} 
 			popupElement={generatePopup()}
 			exp={collection}
+			maxWidth = "md"
 		/>
 	);
 }
@@ -111,7 +177,7 @@ function TagPill(props) {
 	);
 }
 
-//checks the experience object and fills any missing attributes, used before passing it to the ExpTile or before passing it to the addExp DB function
+/**checks the experience object and fills any missing attributes, used before passing it to the ExpTile or before passing it to the addExp DB function*/
 export function checkExpAndFill(exp) {
 	if (typeof exp !== 'object' ||
 	Array.isArray(exp) ||
@@ -199,6 +265,7 @@ export class ExpTile extends React.Component {
 
 	deleteExp() {
 		this.props.db.deleteExp(this.props.exp.id);
+		this.props.addSnackbar("success", "Deleted successfully!");
 	}
 
 	/** the function for generating the experience popup used for displaying all information about an experience */
@@ -229,7 +296,7 @@ export class ExpTile extends React.Component {
 					content = usefulLinks;
 					break;
 				case "budget":
-					content = <span>Budget: {exp.budget.from}€-{exp.budget.to}€ Notes: {exp.budget.notes}</span>
+					content = <span>{exp.budget.from}€-{exp.budget.to}€ Notes: {exp.budget.notes}</span>
 					break;
 				case "tags":
 					content = tags;
@@ -246,7 +313,7 @@ export class ExpTile extends React.Component {
 		});
 		let deleteButton = "";
 		if (this.props.db.getCurrentUser().username === exp.username) {
-			deleteButton = <button className="delete-button" onClick={this.deleteExp.bind(this)}><BsFillTrashFill /></button>
+			deleteButton = <button className="delete-button" onClick={(e) => this.props.askForConfirmation("Do you really want to delete experience: \"" + exp.name + "\"?", this.deleteExp.bind(this))}><BsFillTrashFill /></button>
 		}
 		return (
 			<div className="Tile-Dialog-flex">

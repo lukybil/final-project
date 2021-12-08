@@ -66,9 +66,10 @@ class UserProfile extends React.Component {
     }
     else {
       let userCollections = this.props.db.getCollectionsByUser(params.username, -1);
+      console.log({userCollections});
       content = (
         <div>
-          {viewedUser.username === this.props.db.getCurrentUser().username && 
+          { viewedUser.username === this.props.db.getCurrentUser().username && 
             <DialogButton db={this.props.db} text="Add collection">
               <NewCollection db={this.props.db}/>
             </DialogButton>

@@ -1,28 +1,28 @@
 {
   "files": {
-    "main.css": "./static/css/main.20d46e5c.chunk.css",
-    "main.js": "./static/js/main.eb2b4da4.chunk.js",
-    "main.js.map": "./static/js/main.eb2b4da4.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.be6c5252.js",
-    "runtime-main.js.map": "./static/js/runtime-main.be6c5252.js.map",
-    "static/js/2.367c9112.chunk.js": "./static/js/2.367c9112.chunk.js",
-    "static/js/2.367c9112.chunk.js.map": "./static/js/2.367c9112.chunk.js.map",
-    "static/js/3.083f2bed.chunk.js": "./static/js/3.083f2bed.chunk.js",
-    "static/js/3.083f2bed.chunk.js.map": "./static/js/3.083f2bed.chunk.js.map",
+    "main.css": "./static/css/main.602cd67a.chunk.css",
+    "main.js": "./static/js/main.0fd0d53e.chunk.js",
+    "main.js.map": "./static/js/main.0fd0d53e.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.46beef85.js",
+    "runtime-main.js.map": "./static/js/runtime-main.46beef85.js.map",
+    "static/js/2.fefa1517.chunk.js": "./static/js/2.fefa1517.chunk.js",
+    "static/js/2.fefa1517.chunk.js.map": "./static/js/2.fefa1517.chunk.js.map",
+    "static/js/3.e6ff6ce9.chunk.js": "./static/js/3.e6ff6ce9.chunk.js",
+    "static/js/3.e6ff6ce9.chunk.js.map": "./static/js/3.e6ff6ce9.chunk.js.map",
     "index.html": "./index.html",
-    "static/css/main.20d46e5c.chunk.css.map": "./static/css/main.20d46e5c.chunk.css.map",
-    "static/js/2.367c9112.chunk.js.LICENSE.txt": "./static/js/2.367c9112.chunk.js.LICENSE.txt",
+    "static/css/main.602cd67a.chunk.css.map": "./static/css/main.602cd67a.chunk.css.map",
+    "static/js/2.fefa1517.chunk.js.LICENSE.txt": "./static/js/2.fefa1517.chunk.js.LICENSE.txt",
     "static/media/athens.dfe3c0de.jpg": "./static/media/athens.dfe3c0de.jpg",
     "static/media/colleseum.9508f973.jpg": "./static/media/colleseum.9508f973.jpg",
-    "static/media/logo_placeholder.80914700.png": "./static/media/logo_placeholder.80914700.png",
+    "static/media/logo.df69d295.png": "./static/media/logo.df69d295.png",
     "static/media/london.425bc017.jpg": "./static/media/london.425bc017.jpg",
     "static/media/madrid.34925a2b.jpg": "./static/media/madrid.34925a2b.jpg",
     "static/media/vienna.4dc4c94d.jpg": "./static/media/vienna.4dc4c94d.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.be6c5252.js",
-    "static/js/2.367c9112.chunk.js",
-    "static/css/main.20d46e5c.chunk.css",
-    "static/js/main.eb2b4da4.chunk.js"
+    "static/js/runtime-main.46beef85.js",
+    "static/js/2.fefa1517.chunk.js",
+    "static/css/main.602cd67a.chunk.css",
+    "static/js/main.0fd0d53e.chunk.js"
   ]
 }

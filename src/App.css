@@ -33,9 +33,10 @@ header {
 .header-column-phrase {flex: 65%}
 
 .Logo {
-  max-height: 90px;
+  max-height: 64px;
   object-fit: cover;
   padding: 5px;
+  margin-top: 16px;
 }
 
 h1 {

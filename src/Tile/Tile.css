@@ -146,3 +146,45 @@
     border: none;
     font-size: larger;
 }
+
+.CollectionTile .img-wrapper {
+    width: 100%;
+}
+
+.CollectionTile .wrapper {
+    width: 100%;
+}
+
+.CollectionTile .addExpToCollection-wrapper {
+    margin: auto;
+    border: 1px solid var(--color-subtle-border);
+    border-radius: 8px;
+    padding: 8px;
+    margin: 12px 0;
+    width: fit-content;
+}
+
+.CollectionTile .select-experiences {
+    display: inline-block;
+    padding: 8px;
+    border: 1px solid var(--color-subtle-border);
+    border-radius: 8px;
+    font-size: larger;
+}
+
+.CloseButton {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    color: white;
+    background-color: #222;
+    border: none;
+    border-radius: 50%;
+    padding: 6px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    line-height: 8px;
+    font-size: 16px;
+}

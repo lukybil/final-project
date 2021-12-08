@@ -1,7 +1,7 @@
 import './common.css';
 import './App.css';
 import DB from './DB';
-import logo from './img/logo_placeholder.png';
+import logo from './img/logo.png';
 import Nav from './Nav/Nav';
 import React from 'react';
 import Home from './Home/Home';
@@ -9,7 +9,7 @@ import Experiences from './Experiences/Experiences';
 import {Routes , Route} from 'react-router-dom';
 import UserProfile from './UserProfile/UserProfile';
 import Footer from './Footer/Footer';
-import NotificationInterface from './NotificationProvider/NotificationInterface';
+import NotificationInterface, { ConfirmationInterface } from './NotificationProvider/NotificationInterface';
 import NotificationProvider from './NotificationProvider/NotificationProvider';
 import SearchResults from './SearchResults/SearchResults';
 
@@ -87,6 +87,7 @@ class App extends React.Component {
           <Footer />
         </div>
         <NotificationInterface />
+        <ConfirmationInterface />
       </NotificationProvider>
     );
   };

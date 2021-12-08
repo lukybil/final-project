@@ -77,7 +77,7 @@ class NewExperience extends React.Component {
 		exp.budget = {};
 		exp.budget.from = document.querySelector("input[name=budgetFrom]")?.value;
 		exp.budget.to = document.querySelector("input[name=budgetTo]")?.value;
-		exp.budget.notes = document.querySelector("input[name=budgetNotes]")?.value;
+		exp.budget.notes = document.querySelector("textarea[name=budgetNotes]")?.value;
 
 		this.db.addExp(exp);
 		this.props.addSnackbar("success", "Experience added successfully");

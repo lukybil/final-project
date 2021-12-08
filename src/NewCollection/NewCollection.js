@@ -36,7 +36,7 @@ class NewCollection extends React.Component {
 	render() {
 		return (
 			<div className="NewExperience NewCollection">
-				<form>
+				<form onSubmit={e => this.onSubmit(e)}>
 					<h2>Add Collection</h2>
 					<div className="flex">
 						<span>
@@ -45,7 +45,7 @@ class NewCollection extends React.Component {
 						<input type="text" id="newCollectionImg" name="img" placeholder="Main image" onChange={(e) => this.onMainImgChange(e.target.value)}></input>
 						<input type="text" id="newCollectionName" name="name" placeholder="Name"></input>
 						<textarea type="text" id="newCollectionDescription" name="description" placeholder="Description"></textarea>
-						<button className="button-primary" onClick={e => this.onSubmit(e)}>Add experience</button>
+						<button className="button-primary">Add experience</button>
 					</div>
 				</form>
 			</div>

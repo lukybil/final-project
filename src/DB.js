@@ -7,6 +7,7 @@ import profileImg from "./img/default-profile-picture.png"
 import {checkExpAndFill} from "./Tile/Tile";
 
 const guestUser = {username: "Guest", email: "none", profileImg: profileImg, numberLikes: 0};
+/** A placeholder for a deleted exp, they do not get deleted because it would mess up their array index which is bound to the id */
 const deletedExp = {
     id: -1,
     name: "",
@@ -25,7 +26,7 @@ const deletedExp = {
     comments: []
 };
 
-//Main fake database class used for any data related operarions
+/**Main fake database class used for any data related operarions*/
 class DB {
     /**possible defaultAvatarColors when user creates a new account*/
     colors = ["abdee6", "cbaacb", "ffffb5", "ffccb60", "f3b0c3", "fee1e8", "fed7c3", "ecd5e3", "d4f0f0", "cce2cb", "b6cfb6", "97c1a9", "a2e1db"];
@@ -68,7 +69,7 @@ class DB {
             usefulLinks: ["spain.com", "madrid.es"],
             tags: ["cultural", "rural", "historical", "business"],
             comments: [
-                {username: "kingkong", date: new Date("2021-11-14 21:56:48"), content: "Yo bro, very cool trip bro, wassup btw how ya doin bro, yo cool?"}, 
+                {username: "godzilla", date: new Date("2021-11-14 21:56:48"), content: "Yo bro, very cool trip bro, wassup btw how ya doin bro, yo cool?"}, 
                 {username: "boris", date: new Date("2021-11-15 15:01:03"), content: "Hello broder, gud to see you."}
             ]
         },
@@ -88,7 +89,7 @@ class DB {
             usefulLinks: ["italy.com", "rome.it"],
             tags: ["cultural", "historical"],
             comments: [
-                {username: "kingkong", date: new Date("2021-11-17 21:40:32"), content: "Hi so did you like it bra?"}
+                {username: "kingkong", date: new Date("2021-11-17 21:40:32"), content: "Hi so did you like it bro?"}
             ]
         }
 
@@ -96,14 +97,14 @@ class DB {
 
     //collections storage
     collections = [
-        {
+        /*{
             id: 0,
             name: "",
             img: "",
             username: "",
             description: "",
-            experiences: [this.experiences[0]]
-        }
+            experiences: [0]
+        }*/
     ]
 
     //appSetCurrentUser is a function in the App Component, calling this function notifies the whole app of user change
@@ -130,6 +131,7 @@ class DB {
         });
         localStorage.setItem("usersMap", JSON.stringify([...this.usersMap]));
         localStorage.setItem("experiences", JSON.stringify(this.experiences));
+        localStorage.setItem("collections", JSON.stringify(this.collections));
         localStorage.setItem("currentUser", JSON.stringify(this.currentUser));
         localStorage.setItem("nextExpId", JSON.stringify(this.nextExpId));
         alert("Database saved!");
@@ -139,6 +141,7 @@ class DB {
     loadFromLocalStorage() {
         let protoUsersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
         let protoExperiences = JSON.parse(localStorage.getItem("experiences"));
+        let protoCollections = JSON.parse(localStorage.getItem("collections"));
         let protoCurrentUser = JSON.parse(localStorage.getItem("currentUser"));
         let protoNextExpId = JSON.parse(localStorage.getItem("nextExpId"));
 
@@ -154,6 +157,8 @@ class DB {
                 });
             });
         }
+        if (protoCollections !== null)
+            this.collections = protoCollections;
         if (protoCurrentUser !== null)
             this.currentUser = protoCurrentUser;
         if (protoNextExpId !== null)
@@ -161,6 +166,7 @@ class DB {
 
         console.log("Database loaded.");
         console.log(this.experiences);
+        console.log(this.collections);
         console.log(this.usersMap);
         console.log(this.currentUser);
         console.log(this.nextExpId);
@@ -221,8 +227,9 @@ class DB {
             }
             return false;
         });*/
-        exp = this.experiences[id];
-        if (exp.id === -1)
+        if (Number.isInteger(id) && id < this.experiences.length)
+            exp = this.experiences[id];
+        if (exp?.id === -1)
             return null;
         return exp;
     }
@@ -391,11 +398,14 @@ class DB {
             }
         });
         userExps.sort((a, b) => b.likes.size - a.likes.size);
-        userExps = userExps.slice(0, amount);
+        if (amount !== -1)
+            userExps = userExps.slice(0, amount);
         return userExps;
     }
 
     dateToFullFormat(date) {
+        if (!date instanceof Date)
+            return "";
         return date.getDate().toString().padStart(2, '0')  + "-" + (date.getMonth()+1).toString().padStart(2, '0') + "-" + date.getFullYear().toString().padStart(2, '0') + " " + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
     }
 
@@ -407,13 +417,26 @@ class DB {
     }
 
     getCollection(collectionId) {
-        return this.collections[collectionId].id === collectionId ? this.collections[collectionId] : null;
+        if (collectionId >= this.collections.length)
+            return null;
+        const collection = this.collections[collectionId].id === collectionId ? this.collections[collectionId] : null;
+        if (collection === null) {
+            return null;
+        }
+        if (collection.experiences === undefined)
+            collection.experiences = [];
+        let collectionCopy = {...collection};
+        collectionCopy.experiences = collection?.experiences.map( (expId) => {
+            return this.experiences[expId];
+        });
+        return collectionCopy;
     }
 
     addCollection(collection) {
         if (collection.username !== this.getCurrentUser().username)
             return;
         let collectionTemplate = {
+            id: -1,
             name: "",
             img: "",
             username: "",
@@ -421,24 +444,28 @@ class DB {
             experiences: []
         };
         collectionTemplate = {...collection};
-        collection.id = this.collections.length;
+        collectionTemplate.id = this.collections.length;
         this.collections.push(collectionTemplate);
     }
 
     addToCollection(expId, collectionId) {
+        if (expId === undefined || expId === null || collectionId === undefined || collectionId === null)
+            return;
         let exp = this.getExpById(expId);
         let collection = this.collections[collectionId];
-        if (exp.username === collectionId && exp.username === this.getCurrentUser().username)
-            collection.experiences.push(exp);
+        if (exp.username === collection.username && exp.username === this.getCurrentUser().username) {
+            collection.experiences.push(expId);
+            let expsSet = new Set(collection.experiences);
+            collection.experiences = Array.from(expsSet);
+        }
     }
 
     getCollectionsByUser(username, amount) {
         let userCollections = [];
-        this.collections.forEach( (exp) => {
-            if (exp.username === username) {
-                userCollections.push(exp);
-            }
-        });
+        for (let i = 0; i < this.collections.length; i++) {
+            if (this.collections[i].username === username)
+                userCollections.push(this.getCollection(i));
+        }
         //userCollections.sort((a, b) => b.likes.size - a.likes.size);
         if (amount !== -1)
             userCollections = userCollections.slice(0, amount);

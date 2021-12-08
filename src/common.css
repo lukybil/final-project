@@ -41,6 +41,17 @@
     margin: 8px;
 }
 
+.button-confirm {
+    padding: 8px;
+    display: inline-block;
+    font-size: larger;
+    border-radius: 4px;
+    background-color: rgb(20, 209, 61);
+    color: white;
+    border: none;
+    margin: 8px;
+}
+
 .Brand {
     position: relative;
 }
