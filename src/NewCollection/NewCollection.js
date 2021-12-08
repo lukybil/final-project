@@ -19,7 +19,7 @@ class NewCollection extends React.Component {
 		e.preventDefault();
 		let username;
 		if ((username = this.db.getCurrentUser().username) === "Guest") {
-			this.props.addSnackbar("info", "You have to sign in to add experiences.");
+			this.props.addSnackbar("info", "You have to sign in to create collections.");
 			return;
 		}
 		let names = ["name", "img", "description"];
@@ -30,7 +30,7 @@ class NewCollection extends React.Component {
 		collection.username = username;
 
 		this.db.addCollection(collection);
-		this.props.addSnackbar("success", "Experience added successfully");
+		this.props.addSnackbar("success", "Collection added successfully");
 	}
 
 	render() {
