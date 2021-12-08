@@ -48,7 +48,7 @@ class NewCollection extends React.Component {
 						<input type="text" id="newCollectionName" name="name" placeholder="Name"></input>
 						<label for="newCollectionDescription">Description</label>
 						<textarea type="text" id="newCollectionDescription" name="description" placeholder="Description"></textarea>
-						<button className="button-primary">Add experience</button>
+						<button className="button-primary">Add collection</button>
 					</div>
 				</form>
 			</div>
