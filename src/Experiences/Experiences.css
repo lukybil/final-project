@@ -62,3 +62,7 @@
 .UserRanking tr:nth-child(2n) td {
   background-color: var(--color-secondary);
 }
+
+.main-column-users h3 {
+  margin: 8px 0 12px 0;
+}

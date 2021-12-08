@@ -99,6 +99,7 @@ class Experiences extends React.Component {
 							<DialogButton db={this.db} text="Add experience">
 								<NewExperience db={this.db}/>
 							</DialogButton>
+							<h3>Top Users</h3>
 							<UserRanking topUsers={this.db.getTopUsers(10)}/>
 						</aside>
 					</div>

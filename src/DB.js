@@ -31,6 +31,9 @@ class DB {
     /**possible defaultAvatarColors when user creates a new account*/
     colors = ["abdee6", "cbaacb", "ffffb5", "ffccb60", "f3b0c3", "fee1e8", "fed7c3", "ecd5e3", "d4f0f0", "cce2cb", "b6cfb6", "97c1a9", "a2e1db"];
 
+    /** global pattern for accepting passwords */
+    passwordPattern = "[a-zA-Z0-9\-\_\.\]{8,}";
+
     /** possible tags for experiences */
     static tags = ["cultural", "rural", "historical", "business", "environmental", "eco-tourism"];
 
@@ -328,6 +331,9 @@ class DB {
         }
         if (user.password !== user.confirmPassword) {
             return "Passwords do not match.";
+        }
+        if (user.password.length < 8) {
+            return "Passwords has to be longer than 7 characters.";
         }
         delete user.confirmPassword;
         if (this.usersMap.has(user.username))

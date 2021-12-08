@@ -9,8 +9,23 @@ class SignIn extends React.Component {
 		this.state = {isFormSignIn: true};
 	}
 
+	checkFormValidity(formElement) {
+		let inputs = formElement.querySelectorAll("input");
+		console.log(inputs);
+		for (let i = 0; i < inputs.length; i++) {
+			const input = inputs[i];
+			if (input.checkValidity() === false)
+				return false;
+		}
+		return true;
+	}
+
 	onSignupSubmit(e) {
 		e.preventDefault();
+		if (!this.checkFormValidity(e.target)) {
+			this.props.addSnackbar("error", "One or more inputs are invalid!");
+			return;
+		}
 		let names = ["username", "email", "password", "confirmPassword"];
 		let user = {};
 		names.forEach( (n) => {
@@ -18,7 +33,7 @@ class SignIn extends React.Component {
 		});
 		let message;
 		if ((message = this.props.db.signupUser(user)) === "") {
-			this.props.addSnackbar("success", "Sign in successfull!");
+			this.props.addSnackbar("success", "Sign up successfull!");
 			this.onFormSuccess();
 		}
 		else {
@@ -28,6 +43,10 @@ class SignIn extends React.Component {
 
 	onSignInSubmit(e) {
 		e.preventDefault();
+		if (!this.checkFormValidity(e.target)) {
+			this.props.addSnackbar("error", "One or more inputs are invalid!");
+			return;
+		}
 		let username, password = "";
 		username = document.querySelector(".SignIn input[name=username]")?.value;
 		password = document.querySelector(".SignIn input[name=password]")?.value;
@@ -63,17 +82,17 @@ class SignIn extends React.Component {
 				<div>
 					<h2>Sign up</h2>
 					<span className="under-headline">Save all your favorite experiences!</span>
-					<form>
+					<form onSubmit={this.onSignupSubmit.bind(this)}>
 						<div className="flex">
 							<label for="signupUsername">Username</label>
 							<input id="signupUsername" name="username" placeholder="Username"/>
 							<label for="signupEmail">Email</label>
-							<input id="signupEmail" name="email" placeholder="Email" />
+							<input id="signupEmail" type="email" name="email" placeholder="Email" />
 							<label for="signupPassword">Password</label>
-							<input id="signupPassword" type="password" name="password" placeholder="Password" />
+							<input id="signupPassword" type="password" name="password" placeholder="Password (8+ characters)" pattern={this.props.db.passwordPattern}/>
 							<label for="signupConfirmPassword">Confirm password</label>
-							<input id="signupConfirmPassword" type="password" name="confirmPassword" placeholder="Confirm password" />
-							<button className="button-submit" onClick={this.onSignupSubmit.bind(this)}>Sign up</button>
+							<input id="signupConfirmPassword" type="password" name="confirmPassword" placeholder="Confirm password" pattern={this.props.db.passwordPattern} />
+							<button type="submit" className="button-submit">Sign up</button>
 						</div>
 					</form>
 					<span>Already have an account?{this.genSwitchButton("Sign in")}</span>
@@ -86,13 +105,13 @@ class SignIn extends React.Component {
 				<div>
 					<h2>Sign in</h2>
 					<span className="under-headline">Save all your favorite experiences!</span>
-					<form>
+					<form onSubmit={this.onSignInSubmit.bind(this)}>
 						<div className="flex">
 							<label for="signinUsername">Username</label>
 							<input id="signinUsername" name="username" placeholder="Username"/>
 							<label for="signinPassword">Password</label>
 							<input id="signinPassword" type="password" name="password" placeholder="Password" />
-							<button className="button-submit" onClick={this.onSignInSubmit.bind(this)}>Sign in</button>
+							<button type="submit" className="button-submit">Sign in</button>
 						</div>
 					</form>
 					<span>Not registered yet?{this.genSwitchButton("Sign up")}</span>

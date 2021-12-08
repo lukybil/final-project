@@ -85,7 +85,7 @@ class UserMenu extends React.Component {
               <hr/>
               <button onClick={this.handleEditProfile.bind(this)}>Edit profile <FiEdit/></button>
               <button onClick={props.handleSettings}>Settings <IoMdSettings/></button>
-              <button onClick={props.handleSignOut} className="button-logout">Sign out <BiExit/></button>
+              <button onClick={(e) => props.askForConfirmation("Do you really want to sign out?", props.handleSignOut)} className="button-logout">Sign out <BiExit/></button>
             </div>
           </div>
           <Dialog
@@ -108,9 +108,9 @@ class UserMenu extends React.Component {
                   <label for="editCurrentPassword">Current Password</label>
                   <input type="password" id="editCurrentPassword" name="currentPassword" placeholder="Current password" />
                   <label for="editPassword">Password</label>
-                  <input type="password" id="editPassword" name="password" placeholder="Password" />
+                  <input type="password" id="editPassword" name="password" placeholder="Password (8+ characters)" pattern={this.props.db.passwordPattern}/>
                   <label for="editConfirmPassword">Confirm password</label>
-                  <input type="password" id="editConfirmPassword" name="confirmPassword" placeholder="Confirm password" />
+                  <input type="password" id="editConfirmPassword" name="confirmPassword" placeholder="Confirm password" pattern={this.props.db.passwordPattern}/>
                   <div>
                     <span>Avatar color: </span>
                     <label className="not-hidden">
@@ -120,7 +120,7 @@ class UserMenu extends React.Component {
                   </div>
                   <span className="input-wrapper">
                     <label for="editProfileImg">Profile image</label>
-                    <input id="editProfileImg" name="profileImg" placeholder="Profile image" value={this.state.newProfileImg} onClick={(e) => e.target.select()} onChange={this.onProfileImgChange.bind(this)}/>
+                    <input id="editProfileImg" name="profileImg" placeholder="Profile image link" value={this.state.newProfileImg} onClick={(e) => e.target.select()} onChange={this.onProfileImgChange.bind(this)}/>
                     <img src={this.state.newProfileImg} alt="" className="UserAvatar"/>
                   </span>
                   <button className="button-submit" onClick={this.onEditProfileSubmit.bind(this)}>Save changes</button>
