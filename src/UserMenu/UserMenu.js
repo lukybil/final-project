@@ -101,20 +101,26 @@ class UserMenu extends React.Component {
               <h2>Edit Profile</h2>
               <form>
                 <div className="flex">
-                  <input name="username" placeholder="Username" value={user.username} disabled/>
-                  <input name="email" placeholder="Email" value={user.email} disabled/>
-                  <input type="password" name="currentPassword" placeholder="Current password" />
-                  <input type="password" name="password" placeholder="Password" />
-                  <input type="password" name="confirmPassword" placeholder="Confirm password" />
+                  <label for="editUsername">Username</label>
+                  <input name="username" id="editUsername" placeholder="Username" value={user.username} disabled/>
+                  <label for="editEmail">Email</label>
+                  <input name="email" id="editEmail" placeholder="Email" value={user.email} disabled/>
+                  <label for="editCurrentPassword">Current Password</label>
+                  <input type="password" id="editCurrentPassword" name="currentPassword" placeholder="Current password" />
+                  <label for="editPassword">Password</label>
+                  <input type="password" id="editPassword" name="password" placeholder="Password" />
+                  <label for="editConfirmPassword">Confirm password</label>
+                  <input type="password" id="editConfirmPassword" name="confirmPassword" placeholder="Confirm password" />
                   <div>
                     <span>Avatar color: </span>
-                    <label>
+                    <label className="not-hidden">
                       <input type="color" name="defaultAvatarColor" value={this.state.mixedColors} onChange={this.onColorChange.bind(this)}/>
                       <span className="defaultAvatarPreview UserAvatar" style={{backgroundColor: this.state.mixedColors}}>{user.username.charAt(0).toUpperCase()}</span>
                     </label>
                   </div>
                   <span className="input-wrapper">
-                    <input name="profileImg" placeholder="Profile image" value={this.state.newProfileImg} onClick={(e) => e.target.select()} onChange={this.onProfileImgChange.bind(this)}/>
+                    <label for="editProfileImg">Profile image</label>
+                    <input id="editProfileImg" name="profileImg" placeholder="Profile image" value={this.state.newProfileImg} onClick={(e) => e.target.select()} onChange={this.onProfileImgChange.bind(this)}/>
                     <img src={this.state.newProfileImg} alt="" className="UserAvatar"/>
                   </span>
                   <button className="button-submit" onClick={this.onEditProfileSubmit.bind(this)}>Save changes</button>

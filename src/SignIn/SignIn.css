@@ -18,3 +18,7 @@
     color: #1414c7;
     cursor: pointer;
 }
+
+.SignIn label {
+    display: none !important;
+}

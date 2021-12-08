@@ -42,8 +42,11 @@ class NewCollection extends React.Component {
 						<span>
 							<img src={this.state.mainImg} alt="🖼"></img>
 						</span>
+						<label for="newCollectionImg">Main image</label>
 						<input type="text" id="newCollectionImg" name="img" placeholder="Main image" onChange={(e) => this.onMainImgChange(e.target.value)}></input>
+						<label for="newCollectionName">Name</label>
 						<input type="text" id="newCollectionName" name="name" placeholder="Name"></input>
+						<label for="newCollectionDescription">Description</label>
 						<textarea type="text" id="newCollectionDescription" name="description" placeholder="Description"></textarea>
 						<button className="button-primary">Add experience</button>
 					</div>

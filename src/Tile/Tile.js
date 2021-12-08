@@ -61,8 +61,8 @@ export function Tile(props){
 					open={state.isPopupOpen}
 					onClose={handlePopupClose}
 					scroll={'paper'}
-					aria-labelledby="scroll-dialog-title"
-					aria-describedby="scroll-dialog-description"
+					/*aria-labelledby="scroll-dialog-title"
+					aria-describedby="scroll-dialog-description"*/
 					maxWidth={props.maxWidth || "lg"}
 					className="Tile-dialog"
 				>
@@ -136,7 +136,7 @@ export function CollectionTile(props) {
 		return (
 			<div className="Tile-Dialog-flex CollectionTile">
 				<div className="img-wrapper" style={{position: "relative"}}>
-					<img className="main-img" src={collection.img} alt={collection.h1}></img>
+					<img className="main-img" src={collection.img} alt={collection.h1 || "No experience"}></img>
 				</div>
 				<div className="wrapper">
 					<h2>{collection.name}</h2>
@@ -210,7 +210,8 @@ export function checkExpAndFill(exp) {
 export function InputWithSend(props) {
 	return (
 		<span className="input-with-send">
-			<input type="text" className="main-search"/>
+			<label for="comment-experience" style={{display: "none"}}>Comment experience</label>
+			<input type="text" className="main-search" id="comment-experience"/>
 			<button 
 				onClick={ e => {
 					let input = e.target.closest(".input-with-send").querySelector("input");
@@ -220,6 +221,7 @@ export function InputWithSend(props) {
 				}}
 			>
 				<IoSend />
+				<span style={{display: "none"}}>Post comment</span>
 			</button>
 		</span>
 	);
@@ -319,7 +321,7 @@ export class ExpTile extends React.Component {
 			<div className="Tile-Dialog-flex">
 				<div className="Tile-Dialog-column-info">
 					<div style={{position: "relative"}}>
-						<img className="main-img" src={exp.img} alt={exp.h1} onDoubleClick={(e) => this.handleImageDoubleClick()}></img>
+						<img className="main-img" src={exp.img} alt={exp.name} onDoubleClick={(e) => this.handleImageDoubleClick()}></img>
 						{likeHeart}
 					</div>
 					<div className="wrapper">

@@ -38,9 +38,9 @@ export default function Footer(props) {
                 </div>
                 <div className="column-icons">
                     <ul className="ul-icons">
-                        <li><a href="" className="icon-facebook"><BsFacebook /></a></li>
-                        <li><a href="" className="icon-instagram"><BsInstagram /></a></li>
-                        <li><a href="" className="icon-twitter"><BsTwitter /></a></li>
+                        <li><a href="#f" className="icon-facebook"><BsFacebook /><span style={{display: "none"}}>Facebook</span></a></li>
+                        <li><a href="#i" className="icon-instagram"><BsInstagram /><span style={{display: "none"}}>Instagram</span></a></li>
+                        <li><a href="#t" className="icon-twitter"><BsTwitter /><span style={{display: "none"}}>Twitter</span></a></li>
                     </ul>
                 </div>
             </div>

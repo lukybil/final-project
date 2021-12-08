@@ -65,10 +65,14 @@ class SignIn extends React.Component {
 					<span className="under-headline">Save all your favorite experiences!</span>
 					<form>
 						<div className="flex">
-							<input name="username" placeholder="Username"/>
-							<input name="email" placeholder="Email" />
-							<input type="password" name="password" placeholder="Password" />
-							<input type="password" name="confirmPassword" placeholder="Confirm password" />
+							<label for="signupUsername">Username</label>
+							<input id="signupUsername" name="username" placeholder="Username"/>
+							<label for="signupEmail">Email</label>
+							<input id="signupEmail" name="email" placeholder="Email" />
+							<label for="signupPassword">Password</label>
+							<input id="signupPassword" type="password" name="password" placeholder="Password" />
+							<label for="signupConfirmPassword">Confirm password</label>
+							<input id="signupConfirmPassword" type="password" name="confirmPassword" placeholder="Confirm password" />
 							<button className="button-submit" onClick={this.onSignupSubmit.bind(this)}>Sign up</button>
 						</div>
 					</form>
@@ -84,8 +88,10 @@ class SignIn extends React.Component {
 					<span className="under-headline">Save all your favorite experiences!</span>
 					<form>
 						<div className="flex">
-							<input name="username" placeholder="Username"/>
-							<input type="password" name="password" placeholder="Password" />
+							<label for="signinUsername">Username</label>
+							<input id="signinUsername" name="username" placeholder="Username"/>
+							<label for="signinPassword">Password</label>
+							<input id="signinPassword" type="password" name="password" placeholder="Password" />
 							<button className="button-submit" onClick={this.onSignInSubmit.bind(this)}>Sign in</button>
 						</div>
 					</form>

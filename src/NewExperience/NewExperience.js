@@ -92,22 +92,34 @@ class NewExperience extends React.Component {
 						<span>
 							<img src={this.state.mainImg} alt="🖼"></img>
 						</span>
+						<label for="newExpImg">Main image</label>
 						<input type="text" id="newExpImg" name="img" placeholder="Main image" onChange={(e) => this.onMainImgChange(e.target.value)}></input>
+						<label for="newExpName">Name</label>
 						<input type="text" id="newExpName" name="name" placeholder="Name"></input>
+						<label for="newExpCountry">Country</label>
 						<input type="text" id="newExpCountry" name="country" placeholder="Country"></input>
+						<label for="newExpCity">City</label>
 						<input type="text" id="newExpCity" name="city" placeholder="City"></input>
+						<label for="newExpDescription">Description</label>
 						<textarea type="text" id="newExpDescription" name="description" placeholder="Description"></textarea>
+						<label for="newExpDocumentation">Documentation</label>
 						<textarea id="newExpDocumentation" name="documentation" placeholder="Documentation"></textarea>
 
 						<div className="newExpBudget">
 							<span>Budget</span>
+							<label for="newExpBudgetFrom">Budget From</label>
 							<input type="number" id="newExpBudgetFrom" name="budgetFrom" placeholder="From"></input>
+							<label for="newExpBudgetTo">Budget To</label>
 							<input type="number" id="newExpBudgetTo" name="budgetTo" placeholder="To"></input>
+							<label for="newExpBudgetNotes">Budget notes</label>
 							<textarea type="text" id="newExpBudgetNotes" name="budgetNotes" placeholder="Notes"></textarea>
 						</div>
 
+						<label for="newExpTrasportation">Transportation</label>
 						<textarea id="newExpTrasportation" name="transportation" placeholder="Trasnportation"></textarea>
+						<label for="newExpAccomodation">Accomodation</label>
 						<textarea id="newExpAccomodation" name="accomodation" placeholder="Accomodation"></textarea>
+						<label for="newExpUsefulLinks">Useful links</label>
 						<textarea id="newExpUsefulLinks" name="usefulLinks" placeholder="Useful links"></textarea>
 						<Tags/>
 						<button className="button-primary" onClick={e => this.onSubmit(e)}>Add experience</button>

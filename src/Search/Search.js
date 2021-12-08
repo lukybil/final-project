@@ -94,10 +94,12 @@ export default function Search(props) {
 
     return (
         <div className="Search input-with-send">
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="keyword" placeholder="author, name, location,..." className="main-search" onKeyPress={handleChange} onChange={handleChange}/>
+            <form onSubmit={handleSubmit} label="">
+                <label for="main-search" style={{display: "none"}}>Main search</label>
+                <input id="main-search" type="text" name="keyword" placeholder="author, name, location,..." className="main-search" onKeyPress={handleChange} onChange={handleChange}/>
                 <button type="button" onClick={e => setAdvanced(!advanced)}>
                     {advanced ? <AiFillCaretUp /> : <AiFillCaretDown />}
+                    <span style={{display: "none"}}>Extend/hide advanced options</span>
                 </button>
             </form>
             {advanced && <AdvancedOptions/>}
