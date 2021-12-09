@@ -80,18 +80,18 @@ class Experiences extends React.Component {
 				<div className="main-flex">
 					<div className="main-Grid-wrapper main-column-grid">
 						<Grid container spacing={2} className="main-Grid-container">
-							<Grid item xs={12} md={7}>
+							{topExp.length >= 1 && <Grid item xs={12} md={7}>
 								<ExpTile exp={checkExpAndFill(topExp.length >= 1 ? topExp[0] : {})} db={this.db} />
-							</Grid>
-							<Grid item xs={12} md={5}>
+							</Grid>}
+							{topExp.length >= 2 && <Grid item xs={12} md={5}>
 								<ExpTile exp={checkExpAndFill(topExp.length >= 2 ? topExp[1] : {})} db={this.db} />
-							</Grid>
-							<Grid item xs={12} md={8}>
+							</Grid>}
+							{topExp.length >= 3 && <Grid item xs={12} md={8}>
 								<ExpTile exp={checkExpAndFill(topExp.length >= 3 ? topExp[2] : {})} db={this.db} />
-							</Grid>
-							<Grid item xs={12} md={4}>
+							</Grid>}
+							{topExp.length >= 4 && <Grid item xs={12} md={4}>
 								<ExpTile exp={checkExpAndFill(topExp.length >= 4 ? topExp[3] : {})} db={this.db} />
-							</Grid>
+							</Grid>}
 						</Grid>
 					</div>
 					<div className="main-column-users">

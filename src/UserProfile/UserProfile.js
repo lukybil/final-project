@@ -47,6 +47,7 @@ class UserProfile extends React.Component {
               <NewExperience db={this.props.db}/>
             </DialogButton>
           }
+          {topUserExp.length < 1 && <h4>{viewedUser.username} does not have any experiences yet!</h4>}
           <Grid container spacing={2} className="main-Grid-container">
             <Grid item xs={12} md={7}>
               <ExpTile exp={checkExpAndFill(topUserExp.length >= 1 ? topUserExp[0] : {})} db={this.props.db} />
@@ -54,12 +55,12 @@ class UserProfile extends React.Component {
             <Grid item xs={12} md={5}>
               <ExpTile exp={checkExpAndFill(topUserExp.length >= 2 ? topUserExp[1] : {})} db={this.props.db} />
             </Grid>
-            <Grid item xs={12} md={8}>
+            {topUserExp.length >= 3 && <Grid item xs={12} md={8}>
               <ExpTile exp={checkExpAndFill(topUserExp.length >= 3 ? topUserExp[2] : {})} db={this.props.db} />
-            </Grid>
-            <Grid item xs={12} md={4}>
+            </Grid>}
+            {topUserExp.length >= 4 && <Grid item xs={12} md={4}>
               <ExpTile exp={checkExpAndFill(topUserExp.length >= 4 ? topUserExp[3] : {})} db={this.props.db} />
-            </Grid>
+            </Grid>}
           </Grid>
         </div>
       );
@@ -74,6 +75,7 @@ class UserProfile extends React.Component {
               <NewCollection db={this.props.db}/>
             </DialogButton>
           }
+          {userCollections.length < 1 && <h4>{viewedUser.username} does not have any collection yet!</h4>}
           <Grid container spacing={2} className="main-Grid-container">
             <Grid item xs={12} md={7}>
               <CollectionTile collection={userCollections.length > 0 && userCollections[0]} db={this.props.db} />
@@ -81,12 +83,12 @@ class UserProfile extends React.Component {
             <Grid item xs={12} md={5}>
               <CollectionTile collection={userCollections.length > 1 && userCollections[1]} db={this.props.db} />
             </Grid>
-            <Grid item xs={12} md={8}>
+            {userCollections.length > 2 && <Grid item xs={12} md={8}>
               <CollectionTile collection={userCollections.length > 2 && userCollections[2]} db={this.props.db} />
-            </Grid>
-            <Grid item xs={12} md={4}>
+            </Grid>}
+            {userCollections.length > 3 && <Grid item xs={12} md={4}>
               <CollectionTile collection={userCollections.length > 3 && userCollections[3]} db={this.props.db} />
-            </Grid>
+            </Grid>}
           </Grid>
         </div>
       );
